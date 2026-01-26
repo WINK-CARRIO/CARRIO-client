@@ -1,36 +1,56 @@
 import Header from '../../components/Header.tsx';
 import Card from './Card.tsx';
 import { useState } from 'react';
+import CompanyModal from './CompanyModal.tsx';
 
 export default function IdealTalentPage() {
-  const COMPANY_MAP = {
-    1: {
+  const COMPANY_LIST = [
+    {
+      id: 1,
       name: 'MOLOCO',
+      imageFile: 'MOLOCO.png',
       description: '머신러닝 기반 애드테크 기업',
+      occupation: 'FE 개발',
+      idealTalent:
+        '삼성의 FE(Front-End) 직무를 포함한 전반적인 인재상은 열정, 창의·혁신, 그리고 인간미와 도덕성을 핵심으로 한다. 삼성은 주어진 역할에 안주하지 않고 스스로 목표를 설정해 끝까지 파고드는 태도를 중요하게 보며, 기술 변화가 빠른 환경 속에서도 끊임없이 학습하고 도전하는 열정을 가진 인재를 선호한다. 또한 기존의 방식에 머무르기보다는 사용자 경험과 서비스 품질을 더 나은 방향으로 개선하기 위해 새로운 아이디어를 제시하고, 이를 실제 결과로 연결할 수 있는 창의성과 실행력을 중시한다. 여기에 더해 개인의 성과뿐 아니라 조직 전체의 신뢰와 지속 가능성을 고려하는 윤리 의식과 책임감, 즉 인간미와 도덕성 역시 중요한 평가 기준이다. FE 개발자 관점에서는 이러한 인재상이 곧 기술적 깊이와 문제 해결 능력, 사용자 중심의 UI/UX 고민, 그리고 디자이너·백엔드 개발자 등과의 원활한 협업 태도로 자연스럽게 드러나는 것이 이상적이라고 볼 수 있다.',
     },
-    2: {
+    {
+      id: 2,
       name: 'LG',
+      imageFile: 'LG.png',
       description: '전자제품 기업',
+      occupation: 'BE 개발',
+      idealTalent:
+        '삼성의 FE(Front-End) 직무를 포함한 전반적인 인재상은 열정, 창의·혁신, 그리고 인간미와 도덕성을 핵심으로 한다. 삼성은 주어진 역할에 안주하지 않고 스스로 목표를 설정해 끝까지 파고드는 태도를 중요하게 보며, 기술 변화가 빠른 환경 속에서도 끊임없이 학습하고 도전하는 열정을 가진 인재를 선호한다. 또한 기존의 방식에 머무르기보다는 사용자 경험과 서비스 품질을 더 나은 방향으로 개선하기 위해 새로운 아이디어를 제시하고, 이를 실제 결과로 연결할 수 있는 창의성과 실행력을 중시한다. 여기에 더해 개인의 성과뿐 아니라 조직 전체의 신뢰와 지속 가능성을 고려하는 윤리 의식과 책임감, 즉 인간미와 도덕성 역시 중요한 평가 기준이다. FE 개발자 관점에서는 이러한 인재상이 곧 기술적 깊이와 문제 해결 능력, 사용자 중심의 UI/UX 고민, 그리고 디자이너·백엔드 개발자 등과의 원활한 협업 태도로 자연스럽게 드러나는 것이 이상적이라고 볼 수 있다.',
     },
-  };
+    {
+      id: 3,
+      name: '삼성',
+      imageFile: 'SAMSUNG.jpg',
+      description: '대기업',
+      occupation: '클라우드 서비스 개발',
+      idealTalent:
+        '삼성의 FE(Front-End) 직무를 포함한 전반적인 인재상은 열정, 창의·혁신, 그리고 인간미와 도덕성을 핵심으로 한다. 삼성은 주어진 역할에 안주하지 않고 스스로 목표를 설정해 끝까지 파고드는 태도를 중요하게 보며, 기술 변화가 빠른 환경 속에서도 끊임없이 학습하고 도전하는 열정을 가진 인재를 선호한다. 또한 기존의 방식에 머무르기보다는 사용자 경험과 서비스 품질을 더 나은 방향으로 개선하기 위해 새로운 아이디어를 제시하고, 이를 실제 결과로 연결할 수 있는 창의성과 실행력을 중시한다. 여기에 더해 개인의 성과뿐 아니라 조직 전체의 신뢰와 지속 가능성을 고려하는 윤리 의식과 책임감, 즉 인간미와 도덕성 역시 중요한 평가 기준이다. FE 개발자 관점에서는 이러한 인재상이 곧 기술적 깊이와 문제 해결 능력, 사용자 중심의 UI/UX 고민, 그리고 디자이너·백엔드 개발자 등과의 원활한 협업 태도로 자연스럽게 드러나는 것이 이상적이라고 볼 수 있다.',
+    },
+  ];
 
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
     null
   );
 
-  const company = COMPANY_MAP[selectedCompanyId];
+  const company = COMPANY_LIST.find((c) => c.id === selectedCompanyId);
 
   return (
     <>
       {selectedCompanyId !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="rounded-xl bg-white p-10">
-            <div>{company.name}</div>
-            <div>{company.description}</div>
-
-            <button onClick={() => setSelectedCompanyId(null)}>닫기</button>
-          </div>
-        </div>
+        <CompanyModal
+          isOpen={selectedCompanyId !== null}
+          onClose={() => setSelectedCompanyId(null)}
+          title={company.name}
+          imageFile={company.imageFile}
+          occupation={company.occupation}
+          idealTalent={company.idealTalent}
+        />
       )}
       <div className="inline-flex w-full flex-col items-center justify-start bg-white">
         <Header />
@@ -45,27 +65,16 @@ export default function IdealTalentPage() {
           </div>
           <div className="flex flex-col items-start justify-start gap-16">
             <div className="inline-flex items-center justify-start gap-11">
-              <Card
-                companyId={1}
-                imageFile={'MOLOCO.png'}
-                companyname={'MOLOCO'}
-                subscription={
-                  '머신러닝 기술 기반의 글로벌 애드테크(Ad-tech) 기업'
-                }
-                onClick={() => setSelectedCompanyId(1)}
-              />
-              <Card
-                companyId={2}
-                imageFile={'LG.png'}
-                companyname={'LG'}
-                subscription={'전자제품 기업'}
-              />
-              <Card
-                companyId={3}
-                imageFile={'SAMSUNG.jpg'}
-                companyname={'삼성'}
-                subscription={'대기업'}
-              />
+              {COMPANY_LIST.map((company) => (
+                <Card
+                  companyId={company.id}
+                  imageFile={company.imageFile}
+                  companyname={company.name}
+                  occupation={company.occupation}
+                  subscription={company.description}
+                  onClick={() => setSelectedCompanyId(company.id)}
+                />
+              ))}
             </div>
             <div className="inline-flex items-center justify-start gap-11">
               <div className="inline-flex h-64 w-80 flex-col items-center justify-start gap-2 rounded-[20px] bg-white shadow-[0px_2px_10px_0px_rgba(0,0,0,0.25)]">

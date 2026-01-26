@@ -2,6 +2,7 @@ interface CardProps {
   companyId: number;
   imageFile: string;
   companyname: string;
+  occupation: string;
   subscription: string;
   onClick?: () => void;
 }
@@ -10,12 +11,13 @@ export default function Card({
   companyId,
   imageFile,
   companyname,
+  occupation,
   subscription,
   onClick,
 }: CardProps) {
   return (
     <div
-      id={companyId}
+      id={String(companyId)}
       onClick={onClick}
       className="inline-flex h-64 w-80 flex-col items-center justify-start gap-2 rounded-[20px] bg-white shadow-[0px_2px_10px_0px_rgba(0,0,0,0.25)]"
     >
@@ -27,8 +29,11 @@ export default function Card({
         />
       </div>
       <div className="flex flex-col items-start justify-start gap-1 self-stretch px-5">
-        <div className="justify-start self-stretch text-xl leading-9 font-semibold text-black">
-          {companyname}
+        <div className="flex items-center justify-start gap-2">
+          <div className="justify-start self-stretch text-xl leading-9 font-semibold text-black">
+            {companyname}
+          </div>
+          <div className="text-xs">{occupation}</div>
         </div>
         <div className="justify-start self-stretch text-xs leading-7 font-normal text-neutral-700">
           {subscription}
