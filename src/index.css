@@ -12,14 +12,14 @@ body {
     --color-theme: #F5F5F5;
     --color-theme-bg: #F9F9F9;
 
-    --color-primary: #3370C7;
-    --color-primary-bg: #404040;
+    --color-primary: #7C86FF;
+    --color-primary-bg: #FFFBFB;
 
     --color-secondary: #5F90D8;
     --color-secondary-bg: #8C8C8C;
 
-    --color-teritary: #D9DFE8;
-    --color-teritary-bg: #D9D9D9;
+    --color-logotext: #2D23A0;
+    --color-logotext-bg: #ffffffcc;
 
     --color-quaternary: #EBEBEB;
 
