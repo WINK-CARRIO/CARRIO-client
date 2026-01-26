@@ -39,7 +39,7 @@ export default tseslint.config([
       'jsx-a11y': jsxA11y,
     },
     rules: {
-      'better-tailwindcss/enforce-consistent-class-order': 'warn',
+      'better-tailwindcss/enforce-consistent-class-order': 'off',
       'better-tailwindcss/enforce-consistent-line-wrapping': 'off',
       'better-tailwindcss/no-duplicate-classes': 'warn',
       'better-tailwindcss/no-unnecessary-whitespace': 'warn',
