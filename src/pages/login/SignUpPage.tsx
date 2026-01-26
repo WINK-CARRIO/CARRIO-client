@@ -1,41 +1,108 @@
 import Header from '../../components/Header.tsx';
-import KakaoLogo from '../../assets/svgs/KakaoLogo.tsx';
 import { useNavigate } from 'react-router-dom';
+import KaKaoLogo from '../../assets/svgs/KaKaoLogo.tsx';
+import { type HTMLMotionProps, motion } from 'framer-motion';
+import { useCallback, useState } from 'react';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const validatePasswordMatch = useCallback(() => {
+    if (password !== confirmPassword) {
+      alert('Passwords do not match!');
+      return false;
+    }
+    return true;
+  }, [password, confirmPassword]);
+
+  const onConfirmPasswordKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key !== 'Enter') return;
+
+      validatePasswordMatch();
+    },
+    [validatePasswordMatch]
+  );
+
+  const fanAnimation: HTMLMotionProps<'span'> = {
+    initial: { rotateY: -90, opacity: 0 },
+    animate: { rotateY: 0, opacity: 1 },
+    transition: {
+      duration: 1.5,
+      ease: 'easeOut',
+    },
+    style: {
+      transformOrigin: 'left center',
+      transformStyle: 'preserve-3d',
+    },
+  };
   return (
     <div className="flex min-h-screen w-full flex-col bg-indigo-400">
       {/* HEADER */}
       <Header />
 
       <div className="flex flex-1 items-center justify-between px-80">
-        <div className="inline-flex flex-col items-start gap-10">
+        <div
+          style={{ perspective: 800 }}
+          className="inline-flex flex-col items-start gap-10"
+        >
           <div className="flex flex-col gap-4">
             <div>
-              <span className="text-7xl font-bold text-indigo-800">CAR</span>
-              <span className="text-7xl font-bold text-white/80">EER,</span>
+              <span className="text-logotext text-7xl font-bold">CAR</span>
+              <motion.span
+                className="text-logotext-bg inline-block text-7xl font-bold"
+                {...fanAnimation}
+              >
+                EER,
+              </motion.span>
             </div>
-            <div>
-              <span className="text-7xl font-bold text-indigo-800">R</span>
-              <span className="text-7xl font-bold text-white/80">EADY </span>
-              <span className="text-7xl font-bold text-indigo-800">I</span>
-              <span className="text-7xl font-bold text-white/80">N ONE</span>
-            </div>
-            <div>
-              <span className="text-7xl font-bold text-indigo-800">O</span>
-              <span className="text-7xl font-bold text-white/80">UTLINE</span>
-            </div>
-          </div>
 
-          <div>
-            <span className="text-xl font-semibold text-white">
-              당신의 커리어, 이야기로 완성되다.{' '}
-            </span>
-            <span className="text-xl font-semibold text-indigo-800">
-              CARRIO
-            </span>
+            <div>
+              <span className="text-logotext text-7xl font-bold">R</span>
+
+              <motion.span
+                className="text-logotext-bg inline-block text-7xl font-bold"
+                {...fanAnimation}
+              >
+                EADY
+              </motion.span>
+
+              <span className="text-logotext text-7xl font-bold"> I</span>
+
+              <motion.span
+                className="text-logotext-bg inline-block text-7xl font-bold"
+                {...fanAnimation}
+              >
+                N ONE
+              </motion.span>
+            </div>
+
+            <div>
+              <span className="text-logotext text-7xl font-bold">O</span>
+              <motion.span
+                className="text-logotext-bg inline-block text-7xl font-bold"
+                {...fanAnimation}
+              >
+                UTLINE
+              </motion.span>
+            </div>
           </div>
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.6,
+              delay: 1.6, // 👈 위 fan 애니메이션 끝난 뒤
+              ease: 'easeOut',
+            }}
+          >
+            <span className="text-xl font-semibold text-white">
+              당신의 커리어, 이야기로 완성되다.
+            </span>
+            <span className="text-logotext text-xl font-semibold">CARRIO</span>
+          </motion.div>
         </div>
 
         <div className="inline-flex w-96 flex-col justify-between gap-8 rounded-2xl bg-white/10 p-8 backdrop-blur">
@@ -45,19 +112,29 @@ export default function SignUpPage() {
                 placeholder="이메일 입력"
                 className="border-b border-white pb-1 text-sm text-white focus:outline-none"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 placeholder="비밀번호 입력"
                 className="border-b border-white pb-1 text-sm text-white focus:outline-none"
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <input
                 placeholder="비밀번호 확인"
                 className="border-b border-white pb-1 text-sm text-white focus:outline-none"
                 type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                onKeyDown={onConfirmPasswordKeyDown}
               />
 
-              <button className="h-12 rounded-[20px] border border-white/80 font-semibold text-white">
+              <button
+                className="border-logotext-bg h-12 rounded-[20px] border font-semibold text-white"
+                onClick={validatePasswordMatch}
+              >
                 회원가입
               </button>
             </div>
@@ -80,8 +157,8 @@ export default function SignUpPage() {
               <div className="h-px flex-1 bg-white" />
             </div>
 
-            <button className="flex items-center justify-center gap-2 rounded-[20px] bg-yellow-400 py-3 font-semibold text-black">
-              <KakaoLogo />
+            <button className="bg-kakao flex items-center justify-center gap-2 rounded-[20px] py-3 font-semibold text-black">
+              <KaKaoLogo />
               카카오로 계속하기
             </button>
           </div>
