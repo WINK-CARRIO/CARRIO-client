@@ -2,8 +2,8 @@ interface CardProps {
   companyId: number;
   imageFile: string;
   companyname: string;
-  occupation: string;
-  subscription: string;
+  industry: string;
+  description: string;
   onClick?: () => void;
 }
 
@@ -11,15 +11,15 @@ export default function Card({
   companyId,
   imageFile,
   companyname,
-  occupation,
-  subscription,
+  industry,
+  description,
   onClick,
 }: CardProps) {
   return (
     <div
       id={String(companyId)}
       onClick={onClick}
-      className="inline-flex h-64 w-80 flex-col items-center justify-start gap-2 rounded-[20px] bg-white shadow-[0px_2px_10px_0px_rgba(0,0,0,0.25)]"
+      className="inline-flex h-64 w-80 cursor-pointer flex-col items-center justify-start gap-2 rounded-[20px] bg-white shadow-[0px_2px_10px_0px_rgba(0,0,0,0.25)] hover:shadow-[0px_2px_10px_0px_rgba(0,0,0,0.40)]"
     >
       <div className="h-36 w-full overflow-hidden rounded-tl-[20px] rounded-tr-[20px] bg-gray-100">
         <img
@@ -33,10 +33,10 @@ export default function Card({
           <div className="justify-start self-stretch text-xl leading-9 font-semibold text-black">
             {companyname}
           </div>
-          <div className="text-xs">{occupation}</div>
+          <div className="text-xs">{industry}</div>
         </div>
         <div className="justify-start self-stretch text-xs leading-7 font-normal text-neutral-700">
-          {subscription}
+          {description}
         </div>
       </div>
     </div>
