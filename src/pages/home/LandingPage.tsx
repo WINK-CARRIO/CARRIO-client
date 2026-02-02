@@ -2,9 +2,11 @@ import Header from '../../components/Header.tsx';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Logo from '../../assets/svgs/Logo.tsx';
+import StepCard from '../../components/StepCard.tsx';
 
 export default function LandingPage() {
   const navigate = useNavigate();
+
   return (
     <div className="inline-flex w-full flex-col items-start justify-start bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.01%_0.00%,_#7C86FF_46%,_#959DFF_59%,_#AEB4FF_73%,_#D6D9FF_100%)]">
       <Header />
@@ -34,7 +36,7 @@ export default function LandingPage() {
         </div>
         <div className="inline-flex items-center justify-center gap-2.5">
           <div
-            className="cursor-pointer justify-start text-lg leading-8 font-medium text-indigo-800"
+            className="hover:text-theme-bg text-logotext cursor-pointer justify-start text-lg leading-8 font-medium"
             onClick={() => {
               navigate('/login');
             }}
@@ -67,7 +69,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="absolute top-0 left-44 z-10 flex flex-col rounded-tl-[100px] rounded-tr-[100px] rounded-bl-[100px] bg-indigo-100/90 px-20 py-4 shadow-[0px_2px_20px_rgba(0,0,0,0.25)]"
           >
-            <div className="text-xl leading-10 font-semibold text-indigo-800">
+            <div className="text-logotext text-xl leading-10 font-semibold">
               # 기준이 안 보이는 자소서
             </div>
             <div className="text-base leading-8 font-normal text-neutral-600">
@@ -84,7 +86,7 @@ export default function LandingPage() {
             className="absolute top-24 right-50 z-20 flex flex-col rounded-tl-[100px] rounded-tr-[100px] rounded-br-[100px] bg-indigo-100/90 px-20 py-4 shadow-[0px_2px_20px_rgba(0,0,0,0.25)]"
           >
             {' '}
-            <div className="text-xl leading-10 font-semibold text-indigo-800">
+            <div className="text-logotext text-xl leading-10 font-semibold">
               # 무엇을 써야 할지 모르는 경험들
             </div>
             <div className="text-base leading-8 font-normal text-neutral-600">
@@ -102,7 +104,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="absolute top-56 left-60 z-20 flex flex-col rounded-tl-[100px] rounded-tr-[100px] rounded-bl-[100px] bg-indigo-100/90 px-20 py-4 shadow-[0px_2px_20px_rgba(0,0,0,0.25)]"
           >
-            <div className="text-xl leading-10 font-semibold text-indigo-800">
+            <div className="text-logotext text-xl leading-10 font-semibold">
               # 시간은 부족한데 회사는 많다
             </div>
             <div className="text-base leading-8 font-normal text-neutral-600">
@@ -118,83 +120,60 @@ export default function LandingPage() {
         <div className="flex flex-col items-center justify-start gap-5">
           <div className="flex flex-col items-center justify-start gap-2">
             <img src="src/assets/svgs/LOGO_COLOR.svg" alt={'LOGO'} />
-            <div className="justify-start text-3xl leading-10 font-bold text-indigo-800">
+            <div className="text-logotext justify-start text-3xl leading-10 font-bold">
               Why Us ?
             </div>
           </div>
-          <div className="justify-start text-2xl leading-9 font-medium text-indigo-800">
+          <div className="text-logotext justify-start text-2xl leading-9 font-medium">
             우리가 다르게 만드는 이유
           </div>
         </div>
         <div className="inline-flex items-center justify-start gap-14">
           <motion.div
-            initial={{ opacity: 0, y: -120 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.5, ease: 'easeOut', delay: 1 }}
-            viewport={{ once: true }}
-            className="inline-flex w-80 flex-col items-center justify-start gap-14 rounded-[20px] bg-indigo-100/60 px-4 py-12 shadow-[0px_2px_10px_0px_rgba(0,0,0,0.25)]"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ staggerChildren: 0.8 }}
+            className="flex gap-10"
           >
-            <div className="justify-start text-center text-7xl leading-[96px] font-black text-white">
-              🚩
-            </div>
-            <div className="flex flex-col items-center justify-start gap-10 self-stretch">
-              <div className="justify-start text-center text-3xl leading-10 font-semibold text-indigo-800">
-                기준
-              </div>
-              <div className="justify-start text-center text-base leading-7 font-normal text-zinc-700">
-                기업·직무별 인재상과 <br />
-                평가 요소를 데이터로 정리해 <br />내 자소서가 어디를 향하고{' '}
-                <br />
-                있는지 명확히 보여줍니다.
-              </div>
-            </div>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: -120 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.5, ease: 'easeOut', delay: 2 }}
-            viewport={{ once: true }}
-            className="inline-flex w-80 flex-col items-center justify-start gap-14 rounded-[20px] bg-indigo-100/60 px-4 py-12 shadow-[0px_2px_10px_0px_rgba(0,0,0,0.25)]"
-          >
-            <div className="justify-start text-center text-7xl leading-[96px] font-black text-white">
-              🚩
-            </div>
-            <div className="flex flex-col items-center justify-start gap-10 self-stretch">
-              <div className="justify-start text-center text-3xl leading-10 font-semibold text-indigo-800">
-                선별
-              </div>
-              <div className="justify-start text-center text-base leading-7 font-normal text-zinc-700">
-                수많은 경험 중에서 해당 기업이 <br />
-                중요하게 보는 경험만 골라
-                <br />
-                써야 할 이야기의 우선순위를 <br />
-                잡아줍니다.
-              </div>
-            </div>
-          </motion.div>
+            <StepCard
+              icon="🎯"
+              title="기준"
+              description={
+                <>
+                  기업·직무별 인재상과 <br />
+                  평가 요소를 데이터로 정리해 <br />
+                  내 자소서가 어디를 향하고 <br />
+                  있는지 명확히 보여줍니다.
+                </>
+              }
+            />
 
-          <motion.div
-            initial={{ opacity: 0, y: -120 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.5, ease: 'easeOut', delay: 3 }}
-            viewport={{ once: true }}
-            className="inline-flex w-80 flex-col items-center justify-start gap-14 rounded-[20px] bg-indigo-100/60 px-4 py-12 shadow-[0px_2px_10px_0px_rgba(0,0,0,0.25)]"
-          >
-            <div className="justify-start text-center text-7xl leading-[96px] font-black text-white">
-              🚩
-            </div>
-            <div className="flex flex-col items-center justify-start gap-10 self-stretch">
-              <div className="justify-start text-center text-3xl leading-10 font-semibold text-indigo-800">
-                효율
-              </div>
-              <div className="justify-start text-center text-base leading-7 font-normal text-zinc-700">
-                하나의 경험으로 여러 기업에 <br />
-                대응할 수 있도록
-                <br />
-                회사별 맞춤 자소서 <br />
-                작성 시간을 크게 줄여줍니다.
-              </div>
-            </div>
+            <StepCard
+              icon="🚩"
+              title="선별"
+              description={
+                <>
+                  수많은 경험 중에서 <br />
+                  해당 기업이 중요하게 보는 경험만 <br />
+                  골라 써야 할 이야기의 <br />
+                  우선순위를 잡아줍니다.
+                </>
+              }
+            />
+
+            <StepCard
+              icon="🏃"
+              title="효율"
+              description={
+                <>
+                  하나의 경험으로 여러 기업에 <br />
+                  대응할 수 있도록 <br />
+                  회사별 맞춤 자소서 <br />
+                  작성 시간을 크게 줄여줍니다.
+                </>
+              }
+            />
           </motion.div>
         </div>
       </div>
