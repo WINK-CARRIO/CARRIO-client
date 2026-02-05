@@ -36,7 +36,7 @@ export default function LandingPage() {
         </div>
         <div className="inline-flex items-center justify-center gap-2.5">
           <div
-            className="hover:text-theme-bg text-logotext cursor-pointer justify-start text-lg leading-8 font-medium"
+            className="hover:text-logotext text-theme-bg cursor-pointer justify-start text-lg leading-8 font-semibold"
             onClick={() => {
               navigate('/login');
             }}
