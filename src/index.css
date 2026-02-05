@@ -10,15 +10,15 @@ body {
 }
 @theme {
     --color-theme: #F5F5F5;
-    --color-theme-bg: #F9F9F9;
+    --color-theme-bg: #F1F2FF;
 
     --color-primary: #7C86FF;
     --color-primary-bg: #FFFBFB;
 
-    --color-secondary: #5F90D8;
+    --color-secondary: #525252;
     --color-secondary-bg: #8C8C8C;
 
-    --color-logotext: #2D23A0;
+    --color-logotext: #624797;
     --color-logotext-bg: #ffffffcc;
 
     --color-quaternary: #EBEBEB;
