@@ -8,6 +8,9 @@ body {
 * {
     overscroll-behavior: none;
 }
+::-webkit-scrollbar {
+    display: none;
+}
 @theme {
     --color-theme: #F5F5F5;
     --color-theme-bg: #F1F2FF;
