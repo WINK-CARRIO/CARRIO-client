@@ -12,7 +12,7 @@ const MENUS = [
 
 export default function Header() {
   return (
-    <header className="fixed z-200 inline-flex h-16 w-full items-center justify-between self-stretch bg-indigo-400 px-8 py-3 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.25)]">
+    <header className="sticky top-0 z-50 inline-flex h-16 w-full items-center justify-between self-stretch bg-indigo-400 px-8 py-3 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.25)]">
       {/* Logo */}
       <div className="flex items-center gap-2">
         <Logo />
