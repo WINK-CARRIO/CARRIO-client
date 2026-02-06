@@ -11,6 +11,7 @@ import PersonIcon from '../../assets/svgs/icon/PersonIcon.tsx';
 import ProjectSection from './projectSection/ProjectSection.tsx';
 import PlusIcon from '../../assets/svgs/icon/PlusIcon.tsx';
 import EditIcon from '../../assets/svgs/icon/EditIcon.tsx';
+import Profile from '../../assets/svgs/icon/Profile.tsx';
 
 export default function SpecPage() {
   const TABS = ['자격증', '프로젝트', '대외활동', '수상경력'] as const;
@@ -86,12 +87,12 @@ export default function SpecPage() {
           </div>
           <div className="flex h-24 flex-col items-center justify-center gap-2.5 self-stretch overflow-hidden border-t border-indigo-400/30 py-6 pr-9 pl-8">
             <div className="inline-flex items-center justify-start gap-4 self-stretch">
-              <div className="h-7 w-7 bg-neutral-400"></div>
-              <div className="inline-flex w-48 flex-col items-start justify-start">
+              <Profile />
+              <div className="inline-flex flex-col items-start justify-start">
                 <div className="h-5 justify-start self-stretch text-base leading-6 font-semibold text-black">
                   이가인
                 </div>
-                <div className="h-5 justify-start self-stretch text-base leading-5 font-medium tracking-tight text-neutral-400">
+                <div className="h-5 justify-start self-stretch text-xs leading-5 font-light tracking-tight text-neutral-400">
                   gainlee@kookmin.ac.kr
                 </div>
               </div>
