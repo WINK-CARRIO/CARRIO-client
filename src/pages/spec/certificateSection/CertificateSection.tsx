@@ -1,4 +1,4 @@
-export default function CirtificateSection() {
+export default function CertificateSection() {
   return (
     <div className="flex flex-col items-start justify-start gap-3 self-stretch">
       <div className="inline-flex items-center justify-between self-stretch overflow-hidden rounded-2xl bg-white px-8 py-5 outline outline-1 outline-offset-[-1px] outline-neutral-400/40">

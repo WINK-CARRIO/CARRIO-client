@@ -1,6 +1,6 @@
 import Header from '../../components/Header.tsx';
 import StackCard from '../../components/StackCard.tsx';
-import CirtificateSection from './cirtificateSection/CirtificateSection.tsx';
+import CertificateSection from './certificateSection/CertificateSection.tsx';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import UploadIcon from '../../assets/svgs/icon/UploadIcon.tsx';
@@ -8,6 +8,9 @@ import ListIcon from '../../assets/svgs/icon/ListIcon.tsx';
 import InfoCircleIcon from '../../assets/svgs/icon/InfoCircleIcon.tsx';
 import PaperSearchIcon from '../../assets/svgs/icon/PaperSearchIcon.tsx';
 import PersonIcon from '../../assets/svgs/icon/PersonIcon.tsx';
+import ProjectSection from './projectSection/ProjectSection.tsx';
+import PlusIcon from '../../assets/svgs/icon/PlusIcon.tsx';
+import EditIcon from '../../assets/svgs/icon/EditIcon.tsx';
 
 export default function SpecPage() {
   const TABS = ['자격증', '프로젝트', '대외활동', '수상경력'] as const;
@@ -16,7 +19,7 @@ export default function SpecPage() {
   const [activeTab, setActiveTab] = useState<TabType>('자격증');
 
   const MAIN_MENUS = [
-    { label: '초안 작성하기', path: '/spec', icon: <UploadIcon /> },
+    { label: '초안 작성하기', path: '/draft', icon: <UploadIcon /> },
     { label: '기업별 인재상', path: '/idealTalent', icon: <ListIcon /> },
     { label: '서비스 소개', path: '/about', icon: <InfoCircleIcon /> },
   ];
@@ -116,8 +119,10 @@ export default function SpecPage() {
                       소프트웨어학부
                     </div>
                   </div>
-                  <div className="relative h-4 w-4">
-                    <div className="absolute top-[0.50px] left-[0.75px] h-3.5 w-3.5 bg-gray-500"></div>
+                  <div className="inline-flex items-center justify-center overflow-hidden rounded-[20px] bg-indigo-400 px-3.5 py-[5px]">
+                    <div className="justify-start text-center font-['Pretendard_Variable'] text-sm leading-5 font-medium text-white">
+                      재학{' '}
+                    </div>
                   </div>
                 </div>
                 <div className="flex h-52 flex-col items-start justify-between self-stretch">
@@ -158,12 +163,10 @@ export default function SpecPage() {
                   <StackCard title={'React'} />
                   <StackCard title={'React'} />
                 </div>
-                <div className="relative h-4 w-4">
-                  <div className="absolute top-[0.50px] left-[0.75px] h-3.5 w-3.5 bg-gray-500"></div>
-                </div>
+                <EditIcon />
               </div>
             </div>
-            <div className="inline-flex h-[622px] flex-1 flex-col items-start justify-start gap-10 rounded-[20px] bg-white px-12 py-7 outline outline-1 outline-offset-[-1px] outline-neutral-400/20">
+            <div className="inline-flex h-[622px] flex-1 flex-col items-start justify-start rounded-[20px] bg-white px-12 py-7 outline outline-1 outline-offset-[-1px] outline-neutral-400/20">
               <div className="flex flex-col items-start justify-start gap-10 self-stretch">
                 <div className="inline-flex items-center justify-start gap-10 self-stretch">
                   {TABS.map((tab) => {
@@ -196,11 +199,14 @@ export default function SpecPage() {
                     <div className="justify-start text-base leading-5 font-medium text-zinc-700">
                       총 5건
                     </div>
-                    <div className="relative h-5 w-5">
-                      <div className="absolute top-[4.17px] left-[4.17px] h-3 w-3 outline outline-2 outline-offset-[-1px] outline-zinc-700"></div>
-                    </div>
+                    <PlusIcon />
                   </div>
-                  <CirtificateSection />
+                  <div className="flex h-110 flex-col items-start justify-start self-stretch overflow-auto">
+                    {activeTab === '자격증' && <CertificateSection />}
+                    {activeTab === '프로젝트' && <ProjectSection />}
+                    {activeTab === '대외활동' && <ActivitySection />}
+                    {activeTab === '수상경력' && <AwardSection />}
+                  </div>
                 </div>
               </div>
             </div>
