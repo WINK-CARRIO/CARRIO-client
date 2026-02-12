@@ -1,8 +1,8 @@
 import Header from '../../components/Header.tsx';
 import { useNavigate } from 'react-router-dom';
-import KaKaoLogo from '../../assets/svgs/KaKaoLogo.tsx';
 import { type HTMLMotionProps, motion } from 'framer-motion';
 import { useCallback, useState } from 'react';
+import KakaoLogo from '../../assets/svgs/KakaoLogo.tsx';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -158,7 +158,7 @@ export default function SignUpPage() {
             </div>
 
             <button className="bg-kakao flex items-center justify-center gap-2 rounded-[20px] py-3 font-semibold text-black">
-              <KaKaoLogo />
+              <KakaoLogo />
               카카오로 계속하기
             </button>
           </div>

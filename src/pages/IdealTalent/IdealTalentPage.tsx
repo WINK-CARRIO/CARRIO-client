@@ -1,7 +1,19 @@
 import Header from '../../components/Header.tsx';
 import Card from './Card.tsx';
+import { useState } from 'react';
+import CompanyModal from './modal/CompanyModal.tsx';
+
+type Company = {
+  id: number;
+  name: string;
+  imageFile: string;
+  description: string;
+  industry: string;
+  ideal_url: string;
+};
 
 export default function IdealTalentPage() {
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const COMPANY_LIST = [
     {
       id: 1,
@@ -51,7 +63,9 @@ export default function IdealTalentPage() {
                   companyname={company.name}
                   industry={company.industry}
                   description={company.description}
-                  onClick={() => window.open(company.ideal_url, '_blank')}
+                  onClick={() => {
+                    setSelectedCompany(company);
+                  }}
                 />
               ))}
             </div>
@@ -146,6 +160,15 @@ export default function IdealTalentPage() {
           </div>
         </div>
       </div>
+      {selectedCompany && (
+        <CompanyModal
+          title={selectedCompany.name}
+          description={selectedCompany.description}
+          imageUrl={selectedCompany.ideal_url}
+          isOpen={true}
+          onClose={() => setSelectedCompany(null)}
+        />
+      )}
     </>
   );
 }
