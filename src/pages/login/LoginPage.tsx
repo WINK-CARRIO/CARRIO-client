@@ -1,9 +1,9 @@
 import Header from '../../components/Header.tsx';
 import { useNavigate } from 'react-router-dom';
-import KaKaoLogo from '../../assets/svgs/KaKaoLogo.tsx';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { HTMLMotionProps } from 'framer-motion';
+import KakaoLogo from '../../assets/svgs/KakaoLogo.tsx';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ export default function LoginPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: 0.6,
-              delay: 1.6, // 👈 위 fan 애니메이션 끝난 뒤
+              delay: 1.6,
               ease: 'easeOut',
             }}
           >
@@ -133,7 +133,7 @@ export default function LoginPage() {
             </div>
 
             <button className="bg-kakao flex items-center justify-center gap-2 rounded-[20px] py-3 font-semibold text-black">
-              <KaKaoLogo />
+              <KakaoLogo />
               카카오로 계속하기
             </button>
           </div>
