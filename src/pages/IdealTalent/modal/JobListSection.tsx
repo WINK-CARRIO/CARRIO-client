@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import BackIcon from '../../../assets/svgs/icon/BackIcon.tsx';
 import CheckInfoBox from '../info/CheckInfoBox.tsx';
 import TalentBadge from './TalentBadge.tsx';
+import { motion } from 'framer-motion';
 
 interface JobListSectionProps {
   onClose: () => void;
@@ -70,11 +71,16 @@ export default function JobListSection({ onClose }: JobListSectionProps) {
               직군을 선택하면 해당 직무별 인재상을 확인할 수 있습니다.
             </div>
           </div>
-          <button onClick={onClose}>
+          <button onClick={onClose} className="cursor-pointer">
             <ExitIcon />
           </button>
         </div>
-        <div className="flex flex-col gap-3 self-stretch">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="flex flex-col gap-3 self-stretch"
+        >
           {mockJobList.map((job) => (
             <JobListBox
               key={job.job_category_id}
@@ -84,7 +90,7 @@ export default function JobListSection({ onClose }: JobListSectionProps) {
               }}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -93,7 +99,10 @@ export default function JobListSection({ onClose }: JobListSectionProps) {
     <div className="flex min-h-0 flex-1 flex-col items-start justify-start gap-5 self-stretch overflow-auto px-5 py-7">
       <div className="inline-flex w-full items-start justify-between">
         <div className="flex items-center justify-start gap-2">
-          <button onClick={() => setCategoryId(null)}>
+          <button
+            onClick={() => setCategoryId(null)}
+            className="cursor-pointer"
+          >
             <BackIcon />
           </button>
 
@@ -101,7 +110,9 @@ export default function JobListSection({ onClose }: JobListSectionProps) {
             직군 목록으로 돌아가기
           </div>
         </div>
-        <ExitIcon onClick={onClose} />
+        <button onClick={onClose} className="cursor-pointer">
+          <ExitIcon />
+        </button>
       </div>
       <div className="flex flex-col items-start justify-start gap-1">
         <div className="justify-start text-xl leading-7 font-semibold text-black">

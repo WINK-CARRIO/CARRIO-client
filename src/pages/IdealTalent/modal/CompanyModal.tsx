@@ -3,6 +3,7 @@ import SideBar from './sidebar/SideBar.tsx';
 import CompanyDetailSection from './CompanyDetailSection.tsx';
 import CompanyTalentSection from './CompanyTalentSection.tsx';
 import JobListSection from './JobListSection.tsx';
+import { motion } from 'framer-motion';
 
 interface FileModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ export default function CompanyModal({
   imageUrl,
 }: FileModalProps) {
   const [activeMenu, setActiveMenu] = useState('company');
+
   // ESC 키로 닫기
   useEffect(() => {
     if (!isOpen) return;
@@ -36,8 +38,14 @@ export default function CompanyModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50" />
-      <div className="z-10 flex h-[633px] w-[976px] items-start justify-start gap-5 overflow-hidden rounded-xl bg-white">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }} // 처음 상태: 안보이고, 살짝 아래
+        animate={{ opacity: 1, y: 0 }} // 끝 상태: 보이게, 제자리로
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="z-10 flex h-[633px] w-[976px] items-start justify-start gap-5 overflow-hidden rounded-xl bg-white"
+      >
         <SideBar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
+
         {activeMenu === 'company' && (
           <CompanyDetailSection
             title={title}
@@ -48,7 +56,7 @@ export default function CompanyModal({
         )}
         {activeMenu === 'talent' && <CompanyTalentSection onClose={onClose} />}
         {activeMenu === 'job' && <JobListSection onClose={onClose} />}
-      </div>
+      </motion.div>
     </div>
   );
 }
