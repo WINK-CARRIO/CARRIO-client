@@ -2,103 +2,53 @@ import Header from '../../components/Header.tsx';
 import StackCard from '../../components/StackCard.tsx';
 import CertificateSection from './certificateSection/CertificateSection.tsx';
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import UploadIcon from '../../assets/svgs/icon/UploadIcon.tsx';
-import ListIcon from '../../assets/svgs/icon/ListIcon.tsx';
-import InfoCircleIcon from '../../assets/svgs/icon/InfoCircleIcon.tsx';
-import PaperSearchIcon from '../../assets/svgs/icon/PaperSearchIcon.tsx';
-import PersonIcon from '../../assets/svgs/icon/PersonIcon.tsx';
 import ProjectSection from './projectSection/ProjectSection.tsx';
 import PlusIcon from '../../assets/svgs/icon/PlusIcon.tsx';
 import EditIcon from '../../assets/svgs/icon/EditIcon.tsx';
-import Profile from '../../assets/svgs/icon/Profile.tsx';
-
+import UserMenu from '../../components/UserMenu.tsx';
 export default function SpecPage() {
   const TABS = ['자격증', '프로젝트', '대외활동', '수상경력'] as const;
   type TabType = (typeof TABS)[number];
 
   const [activeTab, setActiveTab] = useState<TabType>('자격증');
 
-  const MAIN_MENUS = [
-    { label: '초안 작성하기', path: '/draft', icon: <UploadIcon /> },
-    { label: '기업별 인재상', path: '/idealTalent', icon: <ListIcon /> },
-    { label: '서비스 소개', path: '/about', icon: <InfoCircleIcon /> },
-  ];
-
-  const MY_MENUS = [
-    { label: '자소서 확인하기', path: '/result', icon: <PaperSearchIcon /> },
-    { label: '내 스펙 조회하기', path: '/spec', icon: <PersonIcon /> },
-  ];
-
+  const mockResumeData = {
+    structured_data: {
+      education: {
+        school: '서울대학교',
+        major: '컴퓨터공학',
+        grad_year: 2024,
+        gpa: '3.87/4.5',
+      },
+      skills: ['Python', 'React', 'Docker'],
+    },
+    free_experiences: [
+      {
+        title: 'AI 챗봇 개발 프로젝트',
+        description:
+          'React와 GPT API를 활용하여 고객 상담 자동화 시스템을 구축했습니다.',
+        period: '2023.03 - 2023.08',
+        role: '프론트엔드 개발',
+        achievements: '응답 시간 50% 단축, 고객 만족도 90% 달성',
+      },
+      {
+        title: '캡스톤 디자인 프로젝트',
+        description:
+          'Spring Boot 기반 REST API 서버를 구축하고 JWT 인증을 구현했습니다.',
+        period: '2023.09 - 2023.12',
+        role: '백엔드 개발',
+        achievements: 'API 응답 속도 30% 개선',
+      },
+    ],
+  };
+  const [gpaValue, gpaMax] = (
+    mockResumeData.structured_data.education.gpa ?? ''
+  ).split('/');
   return (
     <div className="inline-flex min-h-screen w-full flex-col items-start justify-start bg-indigo-50">
       <Header />
       <div className="inline-flex flex-1 items-center justify-start self-stretch">
-        <div className="inline-flex w-72 flex-col items-start justify-between self-stretch border-r border-indigo-200 bg-white/20">
-          <div className="flex flex-col items-start justify-start gap-6 self-stretch px-5 py-10">
-            <div className="flex flex-col items-start justify-start gap-6 self-stretch">
-              <div className="h-5 justify-start self-stretch text-base leading-5 font-medium text-gray-500">
-                주요기능
-              </div>
-              {MAIN_MENUS.map(({ label, path, icon }) => (
-                <NavLink
-                  key={path}
-                  to={path}
-                  className={({ isActive }) =>
-                    [
-                      'inline-flex items-center gap-4 self-stretch rounded-xl px-4 py-3',
-                      isActive
-                        ? 'bg-indigo-400/20 text-indigo-800'
-                        : 'text-zinc-700 hover:bg-indigo-50',
-                    ].join(' ')
-                  }
-                >
-                  {icon}
-                  <span className="flex-1 text-sm leading-5 font-medium">
-                    {label}
-                  </span>
-                </NavLink>
-              ))}
-            </div>
-            <div className="flex flex-col items-start justify-start gap-6 self-stretch">
-              <div className="h-5 justify-start self-stretch text-base leading-5 font-medium text-gray-500">
-                마이페이지
-              </div>
-              {MY_MENUS.map(({ label, path, icon }) => (
-                <NavLink
-                  key={path}
-                  to={path}
-                  className={({ isActive }) =>
-                    [
-                      'inline-flex items-center gap-4 self-stretch rounded-xl px-4 py-3',
-                      isActive
-                        ? 'bg-indigo-400/20 text-indigo-800'
-                        : 'text-zinc-700 hover:bg-indigo-50',
-                    ].join(' ')
-                  }
-                >
-                  {icon}
-                  <span className="flex-1 text-sm leading-5 font-medium">
-                    {label}
-                  </span>
-                </NavLink>
-              ))}
-            </div>
-          </div>
-          <div className="flex h-24 flex-col items-center justify-center gap-2.5 self-stretch overflow-hidden border-t border-indigo-400/30 py-6 pr-9 pl-8">
-            <div className="inline-flex items-center justify-start gap-4 self-stretch">
-              <Profile />
-              <div className="inline-flex flex-col items-start justify-start">
-                <div className="h-5 justify-start self-stretch text-base leading-6 font-semibold text-black">
-                  이가인
-                </div>
-                <div className="h-5 justify-start self-stretch text-xs leading-5 font-light tracking-tight text-neutral-400">
-                  gainlee@kookmin.ac.kr
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <UserMenu />
         <div className="inline-flex flex-1 flex-col items-start justify-between self-stretch px-12 py-10">
           <div className="flex flex-col items-start justify-start gap-1">
             <div className="justify-center self-stretch text-3xl leading-10 font-semibold text-black">
@@ -114,38 +64,41 @@ export default function SpecPage() {
                 <div className="inline-flex items-start justify-between self-stretch">
                   <div className="inline-flex flex-col items-start justify-start gap-[5px]">
                     <div className="justify-start text-xl leading-7 font-bold text-zinc-700">
-                      국민대학교
+                      {mockResumeData.structured_data.education.school}
                     </div>
                     <div className="justify-start text-base leading-6 font-medium text-zinc-700">
-                      소프트웨어학부
+                      {mockResumeData.structured_data.education.major}
                     </div>
                   </div>
-                  <div className="inline-flex items-center justify-center overflow-hidden rounded-[20px] bg-indigo-400 px-3.5 py-[5px]">
-                    <div className="justify-start text-center font-['Pretendard_Variable'] text-sm leading-5 font-medium text-white">
-                      재학{' '}
-                    </div>
-                  </div>
+                  {/*<div className="inline-flex items-center justify-center overflow-hidden rounded-[20px] bg-indigo-400 px-3.5 py-[5px]">*/}
+                  {/*  <div className="justify-start text-center font-['Pretendard_Variable'] text-sm leading-5 font-medium text-white">*/}
+                  {/*    재학*/}
+                  {/*  </div>*/}
+                  {/*</div>*/}
                 </div>
                 <div className="flex h-52 flex-col items-start justify-between self-stretch">
-                  <div className="flex w-52 flex-col items-start justify-start gap-5 overflow-hidden rounded-2xl bg-indigo-50 px-5 py-3">
+                  <div className="flex w-52 flex-col items-start justify-start gap-5 overflow-hidden rounded-xl bg-indigo-50 px-5 py-3">
                     <div className="justify-start self-stretch text-sm leading-5 font-medium text-zinc-700">
-                      입학 : 2024년
+                      입학 연도 :{' '}
+                      {mockResumeData.structured_data.education.grad_year}년
                     </div>
                     <div className="justify-start self-stretch text-sm leading-5 font-medium text-zinc-700">
-                      졸업 : 2028년{' '}
+                      졸업 예정 연도 :{' '}
+                      {mockResumeData.structured_data.education.grad_year + 4}
+                      년{' '}
                     </div>
                   </div>
                   <div className="flex flex-col items-start justify-start gap-0.5 self-stretch">
                     <div className="h-7 justify-start self-stretch text-xs leading-8 font-medium text-neutral-500">
                       평균 학점
                     </div>
-                    <div className="inline-flex w-52 items-start justify-start gap-2.5 overflow-hidden rounded-2xl bg-indigo-50 px-12 py-7">
+                    <div className="inline-flex w-52 items-start justify-start gap-2.5 overflow-hidden rounded-xl bg-indigo-50 px-12 py-7">
                       <div className="flex w-28 items-center justify-start gap-2">
                         <div className="justify-start text-3xl leading-5 font-semibold text-black">
-                          3.87{' '}
+                          {gpaValue}{' '}
                         </div>
                         <div className="justify-start text-xl leading-5 font-medium text-neutral-400">
-                          / 4.5
+                          / {gpaMax}
                         </div>
                       </div>
                     </div>
@@ -154,15 +107,9 @@ export default function SpecPage() {
               </div>
               <div className="inline-flex flex-1 items-start justify-start gap-16 rounded-[20px] bg-white px-5 py-7">
                 <div className="inline-flex h-50 w-32 flex-col items-start justify-start gap-2.5 overflow-auto">
-                  <StackCard title={'Python'} />
-                  <StackCard title={'TypeScript'} />
-                  <StackCard title={'JavaScript'} />
-                  <StackCard title={'Next.js'} />
-                  <StackCard title={'React'} />
-                  <StackCard title={'React'} />
-                  <StackCard title={'React'} />
-                  <StackCard title={'React'} />
-                  <StackCard title={'React'} />
+                  {mockResumeData.structured_data.skills.map((skill, index) => (
+                    <StackCard key={`${skill}-${index}`} title={skill} />
+                  ))}
                 </div>
                 <EditIcon />
               </div>
@@ -195,16 +142,20 @@ export default function SpecPage() {
                     );
                   })}
                 </div>
-                <div className="flex flex-col items-start justify-start gap-5 self-stretch">
+                <div className="flex flex-col items-start justify-start gap-2 self-stretch">
                   <div className="inline-flex items-start justify-between self-stretch">
                     <div className="justify-start text-base leading-5 font-medium text-zinc-700">
-                      총 5건
+                      총 {mockResumeData.free_experiences.length}건
                     </div>
                     <PlusIcon />
                   </div>
                   <div className="flex h-110 flex-col items-start justify-start self-stretch overflow-auto">
                     {activeTab === '자격증' && <CertificateSection />}
-                    {activeTab === '프로젝트' && <ProjectSection />}
+                    {activeTab === '프로젝트' && (
+                      <ProjectSection
+                        projects={mockResumeData.free_experiences}
+                      />
+                    )}
                     {activeTab === '대외활동' && <ActivitySection />}
                     {activeTab === '수상경력' && <AwardSection />}
                   </div>
