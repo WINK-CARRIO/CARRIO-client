@@ -107,7 +107,6 @@ export default function SpecPage() {
     자격증: [],
     프로젝트: ['PROJECT'],
     대외활동: ['ACTIVITY', 'INTERNSHIP'],
-    수상경력: ['HACKATHON'], // 수상경력 타입을 따로 만들거면 여기만 수정
   };
 
   const filteredExperiences = useMemo(() => {
