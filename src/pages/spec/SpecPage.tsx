@@ -7,7 +7,6 @@ import PlusIcon from '../../assets/svgs/icon/PlusIcon.tsx';
 import EditIcon from '../../assets/svgs/icon/EditIcon.tsx';
 import UserMenu from '../../components/UserMenu.tsx';
 import ActivitySection from './activitySection/ActivitySection.tsx';
-// import AwardSection from './awardSection/AwardSection.tsx'; // 실제 경로로 맞춰줘
 
 export default function SpecPage() {
   const TABS = ['자격증', '프로젝트', '대외활동'] as const;
@@ -102,7 +101,6 @@ export default function SpecPage() {
     mockResumeData.structured_data.education.gpa ?? ''
   ).split('/');
 
-  // ✅ 탭 -> type 매핑 (여기만 바꾸면 전체가 다 따라감)
   const tabTypeMap: Record<TabType, ExperienceType[]> = {
     자격증: [],
     프로젝트: ['PROJECT'],
@@ -221,7 +219,7 @@ export default function SpecPage() {
                   <div className="inline-flex items-start justify-between self-stretch">
                     <div className="justify-start text-base leading-5 font-medium text-zinc-700">
                       총{' '}
-                      {activeTab === '자격증' || activeTab === '수상경력'
+                      {activeTab === '자격증'
                         ? certsUIMock.length
                         : filteredExperiences.length}
                       건
