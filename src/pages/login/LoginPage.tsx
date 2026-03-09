@@ -154,7 +154,7 @@ export default function LoginPage() {
             <span className="text-xl font-semibold text-white">
               당신의 커리어, 이야기로 완성되다.
             </span>
-            <span className="text-logotext text-xl font-semibold">CARRIO</span>
+            <span className="text-logotext text-xl font-semibold"> CARRIO</span>
           </motion.div>
         </div>
 

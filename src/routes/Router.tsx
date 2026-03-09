@@ -6,6 +6,7 @@ import LandingPage from '../pages/home/LandingPage.tsx';
 import SpecPage from '../pages/spec/SpecPage.tsx';
 import AdminJobsPage from '../pages/admin/AdminJobsPage.tsx';
 import AdminIdealTalentsPage from '../pages/admin/AdminIdealTalentsPage.tsx';
+import KakaoCallbackPage from '../pages/login/KakaoCallbackPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       { path: '/idealtalent', element: <IdealTalentPage /> },
       { path: '/admin/jobs', element: <AdminJobsPage /> },
       { path: '/admin/idealtalents', element: <AdminIdealTalentsPage /> },
+      { path: '/kakao/callback', element: <KakaoCallbackPage /> },
     ],
   },
 ]);

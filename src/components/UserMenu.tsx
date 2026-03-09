@@ -1,8 +1,10 @@
 import { NavLink } from 'react-router-dom';
+import { useEffect } from 'react';
 import Profile from '../assets/svgs/icon/Profile.tsx';
 import UploadIcon from '../assets/svgs/icon/UploadIcon.tsx';
 import PaperSearchIcon from '../assets/svgs/icon/PaperSearchIcon.tsx';
 import PersonIcon from '../assets/svgs/icon/PersonIcon.tsx';
+import { useAuthStore } from '../store/authStore';
 
 export default function UserMenu() {
   const MAIN_MENUS = [
@@ -14,6 +16,18 @@ export default function UserMenu() {
     { label: '내 스펙 조회하기', path: '/spec', icon: <PersonIcon /> },
   ];
 
+  const user = useAuthStore((state) => state.user);
+  const hydrateAuth = useAuthStore((state) => state.hydrateAuth);
+
+  useEffect(() => {
+    if (!user) {
+      hydrateAuth();
+    }
+  }, [user, hydrateAuth]);
+
+  const username = user?.name ?? '사용자';
+  const email = user?.email ?? '이메일 없음';
+
   return (
     <div className="inline-flex w-72 flex-col items-start justify-between self-stretch border-r border-indigo-200 bg-white/20">
       <div className="flex flex-col items-start justify-start gap-6 self-stretch px-5 py-10">
@@ -21,6 +35,7 @@ export default function UserMenu() {
           <div className="h-5 justify-start self-stretch text-base leading-5 font-medium text-gray-500">
             주요기능
           </div>
+
           {MAIN_MENUS.map(({ label, path, icon }) => (
             <NavLink
               key={path}
@@ -41,10 +56,12 @@ export default function UserMenu() {
             </NavLink>
           ))}
         </div>
+
         <div className="flex flex-col items-start justify-start gap-6 self-stretch">
           <div className="h-5 justify-start self-stretch text-base leading-5 font-medium text-gray-500">
             마이페이지
           </div>
+
           {MY_MENUS.map(({ label, path, icon }) => (
             <NavLink
               key={path}
@@ -66,15 +83,16 @@ export default function UserMenu() {
           ))}
         </div>
       </div>
+
       <div className="flex h-24 flex-col items-center justify-center gap-2.5 self-stretch overflow-hidden border-t border-indigo-400/30 py-6 pr-9 pl-8">
         <div className="inline-flex items-center justify-start gap-4 self-stretch">
           <Profile />
           <div className="inline-flex flex-col items-start justify-start">
             <div className="h-5 justify-start self-stretch text-base leading-6 font-semibold text-black">
-              이가인
+              {username}
             </div>
             <div className="h-5 justify-start self-stretch text-xs leading-5 font-light tracking-tight text-neutral-400">
-              gainlee@kookmin.ac.kr
+              {email}
             </div>
           </div>
         </div>

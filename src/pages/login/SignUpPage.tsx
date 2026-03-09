@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { type HTMLMotionProps, motion } from 'framer-motion';
 import { useCallback, useState } from 'react';
 import KakaoLogo from '../../assets/svgs/KakaoLogo.tsx';
+import { useAuthStore } from '../../store/authStore';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
-
   const API_URL = import.meta.env.VITE_API_URL;
+
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -60,12 +62,21 @@ export default function SignUpPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.detail || data.message || '회원가입에 실패했습니다.');
+        const errorMessage =
+          typeof data.detail === 'string'
+            ? data.detail
+            : Array.isArray(data.detail)
+              ? data.detail.map((item: { msg?: string }) => item.msg).join('\n')
+              : data.message || '회원가입에 실패했습니다.';
+
+        alert(errorMessage);
         return;
       }
 
-      localStorage.setItem('access_token', data.access_token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      setAuth({
+        accessToken: data.access_token,
+        user: data.user,
+      });
 
       alert('회원가입에 성공했습니다.');
       navigate('/');
@@ -83,6 +94,7 @@ export default function SignUpPage() {
     confirmPassword,
     validatePasswordMatch,
     navigate,
+    setAuth,
   ]);
 
   const onConfirmPasswordKeyDown = useCallback(
@@ -193,7 +205,7 @@ export default function SignUpPage() {
             <span className="text-xl font-semibold text-white">
               당신의 커리어, 이야기로 완성되다.
             </span>
-            <span className="text-logotext text-xl font-semibold">CARRIO</span>
+            <span className="text-logotext text-xl font-semibold"> CARRIO</span>
           </motion.div>
         </div>
 
