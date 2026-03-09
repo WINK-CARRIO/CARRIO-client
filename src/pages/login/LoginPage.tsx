@@ -7,8 +7,77 @@ import KakaoLogo from '../../assets/svgs/KakaoLogo.tsx';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const handleLogin = async () => {
+    if (!email.trim() || !password.trim()) {
+      alert('이메일과 비밀번호를 입력해주세요.');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.detail || data.message || '로그인에 실패했습니다.');
+        return;
+      }
+
+      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      alert('로그인에 성공했습니다.');
+      navigate('/');
+    } catch (error) {
+      console.error('login error:', error);
+      alert('서버 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKakaoLogin = async () => {
+    try {
+      setIsLoading(true);
+
+      const res = await fetch(`${API_URL}/auth/kakao/login`, {
+        method: 'GET',
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.detail || data.message || '카카오 로그인에 실패했습니다.');
+        return;
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      console.error('kakao login error:', error);
+      alert('카카오 로그인 요청 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const fanAnimation: HTMLMotionProps<'span'> = {
     initial: { rotateY: -90, opacity: 0 },
     animate: { rotateY: 0, opacity: 1 },
@@ -21,9 +90,9 @@ export default function LoginPage() {
       transformStyle: 'preserve-3d',
     },
   };
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-indigo-400">
-      {/* HEADER */}
       <Header />
 
       <div className="flex flex-1 items-center justify-between px-80">
@@ -72,6 +141,7 @@ export default function LoginPage() {
               </motion.span>
             </div>
           </div>
+
           <motion.div
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
@@ -93,24 +163,31 @@ export default function LoginPage() {
             <div className="flex flex-col gap-10">
               <input
                 placeholder="이메일 입력"
-                className="border-b border-white pb-1 text-sm text-white focus:outline-none"
+                className="border-b border-white bg-transparent pb-1 text-sm text-white placeholder:text-white/70 focus:outline-none"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+
               <input
                 placeholder="비밀번호 입력"
-                className="border-b border-white pb-1 text-sm text-white focus:outline-none"
+                className="border-b border-white bg-transparent pb-1 text-sm text-white placeholder:text-white/70 focus:outline-none"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleLogin();
+                  }
+                }}
               />
 
               <button
-                className="border-logotext-bg h-12 rounded-[20px] border font-semibold text-white"
-                onClick={() => alert(`email: ${email}\npassword: ${password}`)}
+                className="border-logotext-bg h-12 rounded-[20px] border font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={handleLogin}
+                disabled={isLoading}
               >
-                로그인
+                {isLoading ? '로그인 중...' : '로그인'}
               </button>
             </div>
 
@@ -132,7 +209,11 @@ export default function LoginPage() {
               <div className="h-px flex-1 bg-white" />
             </div>
 
-            <button className="bg-kakao flex items-center justify-center gap-2 rounded-[20px] py-3 font-semibold text-black">
+            <button
+              onClick={handleKakaoLogin}
+              disabled={isLoading}
+              className="bg-kakao flex items-center justify-center gap-2 rounded-[20px] py-3 font-semibold text-black disabled:cursor-not-allowed disabled:opacity-60"
+            >
               <KakaoLogo />
               카카오로 계속하기
             </button>

@@ -23,19 +23,21 @@ export default function Card({
     >
       <div className="h-36 w-full overflow-hidden rounded-tl-[20px] rounded-tr-[20px] bg-gray-100">
         <img
-          src={`src/assets/${imageFile}`}
-          alt=""
+          src={imageFile || 'https://placehold.co/348x148'}
+          alt={companyname}
           className="h-full w-full object-cover"
         />
       </div>
+
       <div className="flex flex-col items-start justify-start gap-1 self-stretch px-5">
         <div className="flex items-center justify-start gap-2">
-          <div className="justify-start self-stretch text-xl leading-9 font-semibold text-black">
+          <div className="text-xl leading-9 font-semibold text-black">
             {companyname}
           </div>
-          <div className="text-xs">{industry}</div>
+          <div className="text-xs text-neutral-500">{industry}</div>
         </div>
-        <div className="justify-start self-stretch text-xs leading-7 font-normal text-neutral-700">
+
+        <div className="self-stretch text-xs leading-7 font-normal text-neutral-700">
           {description}
         </div>
       </div>

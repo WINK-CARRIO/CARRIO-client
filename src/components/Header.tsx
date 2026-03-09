@@ -1,10 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import Logo from '../assets/svgs/Logo.tsx';
 
-interface HeaderProps {
-  role?: 'USER' | 'ADMIN';
-}
-
 const BASE_MENUS = [
   { label: '홈', path: '/home' },
   { label: '내 스펙 입력하기', path: '/spec' },
@@ -13,19 +9,35 @@ const BASE_MENUS = [
   { label: '기업별 인재상', path: '/idealTalent' },
 ];
 
-export default function Header({ role = 'USER' }: HeaderProps) {
+type StoredUser = {
+  id?: number;
+  email?: string;
+  name?: string;
+  role?: string;
+  oauth_provider?: string | null;
+  created_at?: string;
+};
+
+export default function Header() {
   const location = useLocation();
 
   const isAdminPath = location.pathname.startsWith('/admin');
 
-  const menus =
-    role === 'ADMIN'
-      ? [...BASE_MENUS, { label: '관리자 페이지', path: '/admin/jobs' }]
-      : BASE_MENUS;
+  let user: StoredUser = {};
+  try {
+    user = JSON.parse(localStorage.getItem('user') || '{}');
+  } catch (error) {
+    console.error('user parse error:', error);
+  }
+
+  const isAdmin = user.role === 'admin';
+
+  const menus = isAdmin
+    ? [...BASE_MENUS, { label: '관리자 페이지', path: '/admin/jobs' }]
+    : BASE_MENUS;
 
   return (
     <header className="sticky top-0 z-50 inline-flex h-16 w-full items-center justify-between bg-indigo-400 px-8 py-3 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.25)]">
-      {/* Logo */}
       <div className="flex items-center gap-2">
         <Logo />
         <span className="text-xl font-bold text-white">
@@ -33,7 +45,6 @@ export default function Header({ role = 'USER' }: HeaderProps) {
         </span>
       </div>
 
-      {/* Menu */}
       <nav className="flex h-10 items-center gap-10">
         {menus.map(({ label, path }) => (
           <NavLink
