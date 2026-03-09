@@ -4,6 +4,7 @@ import SignUpPage from '../pages/login/SignUpPage.tsx';
 import IdealTalentPage from '../pages/IdealTalent/IdealTalentPage.tsx';
 import LandingPage from '../pages/home/LandingPage.tsx';
 import SpecPage from '../pages/spec/SpecPage.tsx';
+import CoverLetterPage from '../pages/result/CoverLetterPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       { path: '/signup', element: <SignUpPage /> },
       { path: '/spec', element: <SpecPage /> },
       { path: '/idealtalent', element: <IdealTalentPage /> },
+      { path: '/result', element: <CoverLetterPage /> },
     ],
   },
 ]);
