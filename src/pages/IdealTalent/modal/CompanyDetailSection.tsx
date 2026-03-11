@@ -25,7 +25,7 @@ export default function CompanyDetailSection({
     };
   }, []);
   return (
-    <div className="inline-flex flex-1 flex-col items-start justify-start gap-5 self-stretch px-5 py-7">
+    <div className="inline-flex flex-1 flex-col items-start justify-start gap-5 self-stretch overflow-y-auto px-5 py-7">
       <div className="inline-flex items-start justify-between self-stretch">
         <div className="inline-flex flex-col items-start justify-start gap-2">
           <div className="justify-start text-xl leading-7 font-semibold text-black">
