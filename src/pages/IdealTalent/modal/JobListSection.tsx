@@ -7,11 +7,60 @@ import TalentBadge from './TalentBadge.tsx';
 import { motion } from 'framer-motion';
 
 interface JobListSectionProps {
+  companyId: number;
+  companyName: string;
   onClose: () => void;
 }
 
-export default function JobListSection({ onClose }: JobListSectionProps) {
+type JobCategory = {
+  job_category_id: number;
+  job_category_name: string;
+  extracted_at: string;
+};
+
+type JobCategoriesResponse = {
+  company_id: number;
+  company_name: string;
+  job_categories: JobCategory[];
+};
+
+type JobTalentResponse = {
+  id: number;
+  company_id: number;
+  company_name: string;
+  job_category_id: number;
+  job_category_name: string;
+  talent_values: {
+    overall: {
+      keywords: string[];
+      description: string;
+      details: string[];
+    };
+    job_specific: {
+      keywords: string[];
+      description: string;
+      details: string[];
+      technical_requirements: string[];
+    };
+  };
+  extracted_at: string;
+};
+
+export default function JobListSection({
+  companyId,
+  companyName,
+  onClose,
+}: JobListSectionProps) {
+  const API_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem('access_token');
+
   const [categoryId, setCategoryId] = useState<number | null>(null);
+  const [jobList, setJobList] = useState<JobCategory[]>([]);
+  const [selectedTalent, setSelectedTalent] =
+    useState<JobTalentResponse | null>(null);
+
+  const [isListLoading, setIsListLoading] = useState(true);
+  const [isDetailLoading, setIsDetailLoading] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -21,43 +70,72 @@ export default function JobListSection({ onClose }: JobListSectionProps) {
     };
   }, []);
 
-  const mockJobList = [
-    {
-      job_category_id: 1,
-      job_category_name: '프론트엔드',
-      summary: '사용자 경험을 설계하고 구현하는 개발자',
-      keywords: ['UI / UX', '문제 해결', '협업'],
-      coreCompetencies: [
-        'React, Vue 등 SPA 프레임워크 이해',
-        '브라우저 렌더링 구조 이해',
-        '웹 접근성 및 성능 최적화 경험',
-      ],
-      requirements: [
-        'HTML, CSS, JavaScript 숙련',
-        'TypeScript 사용 경험',
-        'Git 기반 협업 경험',
-      ],
-    },
-    {
-      job_category_id: 2,
-      job_category_name: '백엔드',
-      summary: '안정적인 서버와 API를 설계하는 개발자',
-      keywords: ['아키텍처', '데이터 처리', '성능'],
-      coreCompetencies: [
-        'Spring 또는 Node.js 이해',
-        'DB 설계 및 최적화 경험',
-        'REST API 설계 능력',
-      ],
-      requirements: [
-        'Java 또는 Python 숙련',
-        'JPA 또는 ORM 사용 경험',
-        'Linux 서버 운영 경험',
-      ],
-    },
-  ];
-  const selectedCategory = mockJobList.find(
-    (job) => job.job_category_id === categoryId
-  );
+  useEffect(() => {
+    const fetchJobCategories = async () => {
+      try {
+        setIsListLoading(true);
+
+        const res = await fetch(
+          `${API_URL}/companies/${companyId}/job-categories`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+          }
+        );
+        const data: JobCategoriesResponse = await res.json();
+
+        if (!res.ok) {
+          console.error('직군 목록 조회 실패:', data);
+          setJobList([]);
+          return;
+        }
+
+        setJobList(data.job_categories ?? []);
+      } catch (error) {
+        console.error('직군 목록 조회 에러:', error);
+        setJobList([]);
+      } finally {
+        setIsListLoading(false);
+      }
+    };
+
+    fetchJobCategories();
+  }, [API_URL, companyId, token]);
+
+  useEffect(() => {
+    if (categoryId === null) {
+      setSelectedTalent(null);
+      return;
+    }
+
+    const fetchJobTalent = async () => {
+      try {
+        setIsDetailLoading(true);
+
+        const res = await fetch(
+          `${API_URL}/companies/${companyId}/job-categories/${categoryId}/talent-values`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+          }
+        );
+        const data: JobTalentResponse = await res.json();
+
+        if (!res.ok) {
+          console.error('직무별 인재상 조회 실패:', data);
+          setSelectedTalent(null);
+          return;
+        }
+
+        setSelectedTalent(data);
+      } catch (error) {
+        console.error('직무별 인재상 조회 에러:', error);
+        setSelectedTalent(null);
+      } finally {
+        setIsDetailLoading(false);
+      }
+    };
+
+    fetchJobTalent();
+  }, [API_URL, companyId, categoryId, token]);
 
   if (categoryId === null) {
     return (
@@ -68,29 +146,40 @@ export default function JobListSection({ onClose }: JobListSectionProps) {
               인재상 보유 직군 목록
             </div>
             <div className="justify-start text-base leading-6 font-normal text-gray-400">
-              직군을 선택하면 해당 직무별 인재상을 확인할 수 있습니다.
+              {companyName}의 직군을 선택하면 해당 직무별 인재상을 확인할 수
+              있습니다.
             </div>
           </div>
+
           <button onClick={onClose} className="cursor-pointer">
             <ExitIcon />
           </button>
         </div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="flex flex-col gap-3 self-stretch"
-        >
-          {mockJobList.map((job) => (
-            <JobListBox
-              key={job.job_category_id}
-              name={job.job_category_name}
-              onClick={() => {
-                setCategoryId(job.job_category_id);
-              }}
-            />
-          ))}
-        </motion.div>
+
+        {isListLoading ? (
+          <div className="py-10 text-sm text-neutral-500">불러오는 중...</div>
+        ) : jobList.length === 0 ? (
+          <div className="py-10 text-sm text-neutral-500">
+            등록된 직군 인재상이 없습니다.
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            className="flex flex-col gap-3 self-stretch"
+          >
+            {jobList.map((job) => (
+              <JobListBox
+                key={job.job_category_id}
+                name={job.job_category_name}
+                onClick={() => {
+                  setCategoryId(job.job_category_id);
+                }}
+              />
+            ))}
+          </motion.div>
+        )}
       </div>
     );
   }
@@ -110,44 +199,71 @@ export default function JobListSection({ onClose }: JobListSectionProps) {
             직군 목록으로 돌아가기
           </div>
         </div>
+
         <button onClick={onClose} className="cursor-pointer">
           <ExitIcon />
         </button>
       </div>
-      <div className="flex flex-col items-start justify-start gap-1">
-        <div className="justify-start text-xl leading-7 font-semibold text-black">
-          {selectedCategory?.job_category_name}
+
+      {isDetailLoading ? (
+        <div className="py-10 text-sm text-neutral-500">불러오는 중...</div>
+      ) : !selectedTalent ? (
+        <div className="py-10 text-sm text-neutral-500">
+          직무별 인재상 정보를 불러오지 못했습니다.
         </div>
-        <div className="justify-start text-sm leading-5 font-normal text-gray-400">
-          직무별 인재상 조회
-        </div>
-      </div>
-      <div className="flex flex-col items-start justify-start gap-2.5 self-stretch rounded-xl bg-indigo-400/10 px-5 py-3 outline outline-1 outline-offset-[-1px] outline-indigo-400/30">
-        <div className="justify-start text-sm leading-5 font-semibold text-neutral-600">
-          {selectedCategory?.summary}
-        </div>
-        <div className="inline-flex items-center justify-start gap-3.5">
-          {selectedCategory?.keywords.map((keyword) => (
-            <TalentBadge keyword={keyword} />
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-col items-start justify-start gap-2 self-stretch">
-        <div className="justify-start text-sm leading-5 font-medium text-neutral-600">
-          직무 핵심 역량
-        </div>
-        {selectedCategory?.coreCompetencies.map((competencie) => (
-          <CheckInfoBox title={competencie} />
-        ))}
-      </div>
-      <div className="flex flex-col items-start justify-start gap-2 self-stretch">
-        <div className="justify-start text-sm leading-5 font-medium text-neutral-600">
-          기술 요구사항
-        </div>
-        {selectedCategory?.requirements.map((requirement) => (
-          <CheckInfoBox title={requirement} />
-        ))}
-      </div>
+      ) : (
+        <>
+          <div className="flex flex-col items-start justify-start gap-1">
+            <div className="justify-start text-xl leading-7 font-semibold text-black">
+              {selectedTalent.job_category_name}
+            </div>
+            <div className="justify-start text-sm leading-5 font-normal text-gray-400">
+              직무별 인재상 조회
+            </div>
+          </div>
+
+          <div className="flex flex-col items-start justify-start gap-2.5 self-stretch rounded-xl bg-indigo-400/10 px-5 py-3 outline outline-1 outline-offset-[-1px] outline-indigo-400/30">
+            <div className="justify-start text-sm leading-5 font-semibold text-neutral-600">
+              {selectedTalent.talent_values.job_specific.description}
+            </div>
+
+            <div className="inline-flex flex-wrap items-center justify-start gap-3.5">
+              {selectedTalent.talent_values.job_specific.keywords.map(
+                (keyword) => (
+                  <TalentBadge key={keyword} keyword={keyword} />
+                )
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col items-start justify-start gap-2 self-stretch">
+            <div className="justify-start text-sm leading-5 font-medium text-neutral-600">
+              직무 핵심 역량
+            </div>
+
+            {selectedTalent.talent_values.job_specific.details.map(
+              (detail, index) => (
+                <CheckInfoBox key={`${detail}-${index}`} title={detail} />
+              )
+            )}
+          </div>
+
+          <div className="flex flex-col items-start justify-start gap-2 self-stretch">
+            <div className="justify-start text-sm leading-5 font-medium text-neutral-600">
+              기술 요구사항
+            </div>
+
+            {selectedTalent.talent_values.job_specific.technical_requirements.map(
+              (requirement, index) => (
+                <CheckInfoBox
+                  key={`${requirement}-${index}`}
+                  title={requirement}
+                />
+              )
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

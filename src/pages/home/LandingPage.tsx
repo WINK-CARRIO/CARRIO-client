@@ -35,14 +35,15 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="inline-flex items-center justify-center gap-2.5">
-          <div
-            className="hover:text-logotext text-theme-bg cursor-pointer justify-start text-lg leading-8 font-semibold"
-            onClick={() => {
-              navigate('/login');
-            }}
+          <button
+            onClick={() => navigate('/login')}
+            className="group relative cursor-pointer px-6 py-3 text-lg font-semibold text-white transition"
           >
-            자소서 작성하기 →
-          </div>
+            <span className="relative z-10">자소서 작성하기 →</span>
+
+            {/* hover background */}
+            <span className="absolute inset-0 -z-0 rounded-full bg-white/10 opacity-0 transition duration-300 group-hover:opacity-100"></span>
+          </button>
         </div>
       </div>
       <div className="inline-flex h-full flex-col items-center justify-start gap-14 self-stretch bg-gradient-to-b from-violet-300/0 to-white/60 px-32 py-44">

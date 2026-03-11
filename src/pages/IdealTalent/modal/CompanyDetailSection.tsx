@@ -4,15 +4,17 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 interface CompanyDetailSectionProps {
-  onClose: () => void;
   title?: string;
   description?: string;
+  industry?: string;
   imageUrl?: string;
+  onClose: () => void;
 }
 export default function CompanyDetailSection({
   title,
   description,
   imageUrl,
+  industry,
   onClose,
 }: CompanyDetailSectionProps) {
   useEffect(() => {
@@ -44,6 +46,7 @@ export default function CompanyDetailSection({
         className="flex flex-col items-start justify-start gap-5 self-stretch"
       >
         <InfoBox label="기업명">{title}</InfoBox>
+        <InfoBox label="산업 분야">{industry}</InfoBox>
         <InfoBox label="기업 소개">{description}</InfoBox>
         <InfoBox label="기업 홈페이지">
           <a

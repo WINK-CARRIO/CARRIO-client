@@ -5,24 +5,27 @@ import CompanyTalentSection from './CompanyTalentSection.tsx';
 import JobListSection from './JobListSection.tsx';
 import { motion } from 'framer-motion';
 
-interface FileModalProps {
+interface CompanyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title?: string;
-  description?: string;
-  imageUrl?: string;
+  companyId: number;
+  companyName: string;
+  companyDescription: string;
+  companyIndustry: string;
+  companyLogoUrl: string;
 }
 
 export default function CompanyModal({
   isOpen,
   onClose,
-  title,
-  description,
-  imageUrl,
-}: FileModalProps) {
+  companyId,
+  companyName,
+  companyDescription,
+  companyIndustry,
+  companyLogoUrl,
+}: CompanyModalProps) {
   const [activeMenu, setActiveMenu] = useState('company');
 
-  // ESC 키로 닫기
   useEffect(() => {
     if (!isOpen) return;
 
@@ -34,13 +37,25 @@ export default function CompanyModal({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  useEffect(() => {
+    if (isOpen) {
+      setActiveMenu('company');
+    }
+  }, [isOpen, companyId]);
+
   if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50" />
+      <button
+        type="button"
+        className="absolute inset-0 bg-black/50"
+        onClick={onClose}
+      />
+
       <motion.div
-        initial={{ opacity: 0, y: 10 }} // 처음 상태: 안보이고, 살짝 아래
-        animate={{ opacity: 1, y: 0 }} // 끝 상태: 보이게, 제자리로
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
         className="z-10 flex h-[633px] w-[976px] items-start justify-start gap-5 overflow-hidden rounded-xl bg-white"
       >
@@ -48,14 +63,25 @@ export default function CompanyModal({
 
         {activeMenu === 'company' && (
           <CompanyDetailSection
-            title={title}
-            description={description}
-            imageUrl={imageUrl}
+            title={companyName}
+            description={companyDescription}
+            industry={companyIndustry}
+            imageUrl={companyLogoUrl}
             onClose={onClose}
           />
         )}
-        {activeMenu === 'talent' && <CompanyTalentSection onClose={onClose} />}
-        {activeMenu === 'job' && <JobListSection onClose={onClose} />}
+
+        {activeMenu === 'talent' && (
+          <CompanyTalentSection companyId={companyId} onClose={onClose} />
+        )}
+
+        {activeMenu === 'job' && (
+          <JobListSection
+            companyId={companyId}
+            companyName={companyName}
+            onClose={onClose}
+          />
+        )}
       </motion.div>
     </div>
   );

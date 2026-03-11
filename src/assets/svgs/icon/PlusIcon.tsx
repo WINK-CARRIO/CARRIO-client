@@ -1,5 +1,10 @@
 import type { SVGProps } from 'react';
-const SvgComponent = (props: SVGProps<SVGSVGElement>) => (
+
+interface IconProps extends SVGProps<SVGSVGElement> {
+  color?: string;
+}
+
+const SvgComponent = ({ color = '#3F3F47', ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={20}
@@ -8,7 +13,7 @@ const SvgComponent = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      stroke="#3F3F47"
+      stroke={color}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}
@@ -16,4 +21,5 @@ const SvgComponent = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+
 export default SvgComponent;
