@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import RowMenu from './RowMenu.tsx';
 import type { Job } from '../pages/admin/AdminJobsPage.tsx';
 
 type SearchProps = {
   search: string;
   jobs: Job[];
-  setJobs: Dispatch<SetStateAction<Job[]>>;
+  onEdit: (job: Job) => void;
+  onDelete: (job: Job) => void;
 };
 
 const ITEMS_PER_PAGE = 4;
 
-export default function JobTable({ search, jobs, setJobs }: SearchProps) {
+export default function JobTable({ search, jobs, onEdit, onDelete }: SearchProps) {
   const [page, setPage] = useState(1);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
@@ -64,8 +64,8 @@ export default function JobTable({ search, jobs, setJobs }: SearchProps) {
   const canPrev = page > 1;
   const canNext = page < totalPages;
 
-  const handleDelete = (id: number) => {
-    setJobs((prev) => prev.filter((job) => job.id !== id));
+  const handleDelete = (job: Job) => {
+    onDelete(job);
     setOpenMenuId(null);
   };
 
@@ -125,8 +125,11 @@ export default function JobTable({ search, jobs, setJobs }: SearchProps) {
                     onToggle={() =>
                       setOpenMenuId((prev) => (prev === job.id ? null : job.id))
                     }
-                    onDelete={() => handleDelete(job.id)}
-                    onEdit={() => console.log('edit', job.id)}
+                    onDelete={() => handleDelete(job)}
+                    onEdit={() => {
+                      onEdit(job);
+                      setOpenMenuId(null);
+                    }}
                   />
                 </>
               )}

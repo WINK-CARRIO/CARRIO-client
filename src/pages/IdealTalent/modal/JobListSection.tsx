@@ -52,6 +52,7 @@ export default function JobListSection({
   onClose,
 }: JobListSectionProps) {
   const API_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem('access_token');
 
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [jobList, setJobList] = useState<JobCategory[]>([]);
@@ -75,7 +76,10 @@ export default function JobListSection({
         setIsListLoading(true);
 
         const res = await fetch(
-          `${API_URL}/companies/${companyId}/job-categories`
+          `${API_URL}/companies/${companyId}/job-categories`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+          }
         );
         const data: JobCategoriesResponse = await res.json();
 
@@ -95,7 +99,7 @@ export default function JobListSection({
     };
 
     fetchJobCategories();
-  }, [API_URL, companyId]);
+  }, [API_URL, companyId, token]);
 
   useEffect(() => {
     if (categoryId === null) {
@@ -108,7 +112,10 @@ export default function JobListSection({
         setIsDetailLoading(true);
 
         const res = await fetch(
-          `${API_URL}/companies/${companyId}/job-categories/${categoryId}/talent-values`
+          `${API_URL}/companies/${companyId}/job-categories/${categoryId}/talent-values`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+          }
         );
         const data: JobTalentResponse = await res.json();
 
@@ -128,7 +135,7 @@ export default function JobListSection({
     };
 
     fetchJobTalent();
-  }, [API_URL, companyId, categoryId]);
+  }, [API_URL, companyId, categoryId, token]);
 
   if (categoryId === null) {
     return (

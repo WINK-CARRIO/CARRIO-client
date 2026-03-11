@@ -11,14 +11,14 @@ const STATUS_STYLE = {
     text: 'text-green-900',
   },
   RUNNING: {
-    label: '미추출',
-    bg: 'bg-red-400/50',
-    text: 'text-red-600',
-  },
-  NONE: {
     label: '추출 중',
     bg: 'bg-yellow-300/50',
     text: 'text-orange-600',
+  },
+  NONE: {
+    label: '미추출',
+    bg: 'bg-red-400/50',
+    text: 'text-red-600',
   },
 };
 

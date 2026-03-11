@@ -4,6 +4,19 @@ import JobIcon from '../assets/svgs/icon/JobIcon.tsx';
 import CompanyIcon from '../assets/svgs/icon/CompanyIcon.tsx';
 
 export default function AdminMenu() {
+  let userName = '관리자';
+  let userEmail = 'admin@example.com';
+
+  try {
+    const rawUser = localStorage.getItem('user');
+    if (rawUser && rawUser !== 'undefined' && rawUser !== 'null') {
+      const parsed = JSON.parse(rawUser) as { name?: string; email?: string };
+      if (parsed.name) userName = parsed.name;
+      if (parsed.email) userEmail = parsed.email;
+    }
+  } catch (error) {
+    console.error('admin menu user parse error:', error);
+  }
   const SERVICE_MENUS = [
     { label: '직군 관리', path: '/admin/jobs', icon: <JobIcon /> },
     {
@@ -46,10 +59,10 @@ export default function AdminMenu() {
           <Profile />
           <div className="inline-flex flex-col items-start justify-start">
             <div className="h-5 justify-start self-stretch text-base leading-6 font-semibold text-black">
-              이가인
+              {userName}
             </div>
             <div className="h-5 justify-start self-stretch text-xs leading-5 font-light tracking-tight text-neutral-400">
-              gainlee@kookmin.ac.kr
+              {userEmail}
             </div>
           </div>
         </div>

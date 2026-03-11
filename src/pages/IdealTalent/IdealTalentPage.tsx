@@ -2,6 +2,9 @@ import Header from '../../components/Header.tsx';
 import Card from './Card.tsx';
 import { useEffect, useState } from 'react';
 import CompanyModal from './modal/CompanyModal.tsx';
+import SamsungLogo from '../../assets/SAMSUNG.jpg';
+import LGLogo from '../../assets/LG.png';
+import MolocoLogo from '../../assets/MOLOCO.png';
 
 type Company = {
   id: number;
@@ -20,6 +23,7 @@ type CompaniesResponse = {
 
 export default function IdealTalentPage() {
   const API_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem('access_token');
 
   const [companies, setCompanies] = useState<Company[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
@@ -30,9 +34,9 @@ export default function IdealTalentPage() {
       try {
         setIsLoading(true);
 
-        const res = await fetch(
-          `${API_URL}/companies?sort=name&page=1&limit=20`
-        );
+        const res = await fetch(`${API_URL}/companies?sort=name&page=1&limit=20`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
         const data: CompaniesResponse = await res.json();
 
         if (!res.ok) {
@@ -49,7 +53,23 @@ export default function IdealTalentPage() {
     };
 
     fetchCompanies();
-  }, [API_URL]);
+  }, [API_URL, token]);
+
+  const resolveCompanyImage = (company: Company) => {
+    const name = company.name.toLowerCase();
+
+    if (name.includes('삼성') || name.includes('samsung')) {
+      return SamsungLogo;
+    }
+    if (name.includes('lg')) {
+      return LGLogo;
+    }
+    if (name.includes('moloco') || name.includes('몰로코')) {
+      return MolocoLogo;
+    }
+
+    return company.logo_url;
+  };
 
   return (
     <>
@@ -74,7 +94,7 @@ export default function IdealTalentPage() {
                 <Card
                   key={company.id}
                   companyId={company.id}
-                  imageFile={company.logo_url}
+                  imageFile={resolveCompanyImage(company)}
                   companyname={company.name}
                   industry={company.industry}
                   description={company.description}

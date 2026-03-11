@@ -13,12 +13,13 @@ type OverallTalentResponse = {
   id: number;
   company_id: number;
   company_name: string;
+  extracted_at?: string;
   talent_values: {
     overall: {
       keywords: string[];
       description: string;
       details: string[];
-      extracted_at: string;
+      extracted_at?: string;
     };
   };
 };
@@ -28,6 +29,7 @@ export default function CompanyTalentSection({
   onClose,
 }: CompanyTalentSectionProps) {
   const API_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem('access_token');
   const [data, setData] = useState<OverallTalentResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -45,7 +47,10 @@ export default function CompanyTalentSection({
         setIsLoading(true);
 
         const res = await fetch(
-          `${API_URL}/companies/${companyId}/talent-values`
+          `${API_URL}/companies/${companyId}/talent-values`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+          }
         );
         const result = await res.json();
 
@@ -63,7 +68,7 @@ export default function CompanyTalentSection({
     };
 
     fetchTalent();
-  }, [API_URL, companyId]);
+  }, [API_URL, companyId, token]);
 
   const overall = data?.talent_values.overall;
 

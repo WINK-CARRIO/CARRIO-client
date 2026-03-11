@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../../components/Header.tsx';
 import PlusIcon from '../../assets/svgs/icon/PlusIcon.tsx';
 import MagnifyIcon from '../../assets/svgs/icon/MagnifyIcon.tsx';
 import JobTable from '../../components/JobTable.tsx';
 import AdminMenu from '../../components/AdminMenu.tsx';
 import AddJobTalentModal from '../../components/AddJobTalentModal.tsx';
+import EditJobCategoryModal from '../../components/EditJobCategoryModal.tsx';
 
 export type Job = {
   id: number;
@@ -13,61 +14,146 @@ export type Job = {
   createdAt: string;
 };
 
-const INITIAL_JOBS: Job[] = [
-  {
-    id: 1,
-    name: '개발자',
-    description: '소프트웨어 개발 및 엔지니어링',
-    createdAt: '2026-01-18',
-  },
-  {
-    id: 2,
-    name: '데이터 분석',
-    description: '데이터 분석 및 리포팅',
-    createdAt: '2026-01-19',
-  },
-  {
-    id: 3,
-    name: '디자이너',
-    description: 'UI/UX 디자인',
-    createdAt: '2026-01-20',
-  },
-  {
-    id: 4,
-    name: '기획자',
-    description: '서비스 기획',
-    createdAt: '2026-01-21',
-  },
-];
+type JobCategoryResponse = {
+  id: number;
+  name: string;
+  description: string;
+  created_at?: string;
+};
+
+type JobCategoriesResponse = {
+  job_categories: JobCategoryResponse[];
+};
 
 export default function AdminJobsPage() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [search, setSearch] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [jobs, setJobs] = useState<Job[]>(INITIAL_JOBS);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
-  const handleAddJob = (newJob: {
+  const getAuthHeaders = (json = false): HeadersInit => {
+    const token = localStorage.getItem('access_token');
+    const headers: Record<string, string> = {};
+    if (token) headers.Authorization = `Bearer ${token}`;
+    if (json) headers['Content-Type'] = 'application/json';
+    return headers;
+  };
+
+  const parseErrorMessage = async (res: Response) => {
+    try {
+      const body = (await res.json()) as { detail?: unknown; message?: unknown };
+      if (typeof body.detail === 'string') return body.detail;
+      if (typeof body.message === 'string') return body.message;
+      return '요청에 실패했습니다.';
+    } catch {
+      return '요청에 실패했습니다.';
+    }
+  };
+
+  const fetchJobs = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${API_URL}/job-categories`);
+      if (!res.ok) {
+        alert(await parseErrorMessage(res));
+        setJobs([]);
+        return;
+      }
+      const data = (await res.json()) as JobCategoriesResponse;
+      const mapped = (data.job_categories ?? []).map((job) => ({
+        id: job.id,
+        name: job.name,
+        description: job.description,
+        createdAt: job.created_at ? job.created_at.slice(0, 10) : '',
+      }));
+      setJobs(mapped);
+    } catch (error) {
+      console.error('직군 목록 조회 에러:', error);
+      setJobs([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, [API_URL]);
+
+  const handleAddJob = async (newJob: {
     job_category_name: string;
     description: string;
   }) => {
-    const nextId =
-      jobs.length > 0 ? Math.max(...jobs.map((job) => job.id)) + 1 : 1;
+    try {
+      const res = await fetch(`${API_URL}/admin/job-categories`, {
+        method: 'POST',
+        headers: getAuthHeaders(true),
+        body: JSON.stringify({
+          name: newJob.job_category_name,
+          description: newJob.description,
+        }),
+      });
+      if (!res.ok) {
+        alert(await parseErrorMessage(res));
+        return false;
+      }
+      await fetchJobs();
+      return true;
+    } catch (error) {
+      console.error('직군 추가 에러:', error);
+      alert('직군 추가 중 오류가 발생했습니다.');
+      return false;
+    }
+  };
 
-    const createdAt = new Date().toISOString().slice(0, 10);
+  const handleEditJob = async (payload: { name: string; description: string }) => {
+    if (!selectedJob) return false;
+    try {
+      const res = await fetch(
+        `${API_URL}/admin/job-categories/${selectedJob.id}`,
+        {
+          method: 'PUT',
+          headers: getAuthHeaders(true),
+          body: JSON.stringify(payload),
+        }
+      );
+      if (!res.ok) {
+        alert(await parseErrorMessage(res));
+        return false;
+      }
+      await fetchJobs();
+      return true;
+    } catch (error) {
+      console.error('직군 수정 에러:', error);
+      alert('직군 수정 중 오류가 발생했습니다.');
+      return false;
+    }
+  };
 
-    const job: Job = {
-      id: nextId,
-      name: newJob.job_category_name,
-      description: newJob.description,
-      createdAt,
-    };
-
-    setJobs((prev) => [...prev, job]);
+  const handleDeleteJob = async (job: Job) => {
+    if (!window.confirm('정말 삭제할까요?')) return;
+    try {
+      const res = await fetch(`${API_URL}/admin/job-categories/${job.id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
+      if (!res.ok) {
+        alert(await parseErrorMessage(res));
+        return;
+      }
+      await fetchJobs();
+    } catch (error) {
+      console.error('직군 삭제 에러:', error);
+      alert('직군 삭제 중 오류가 발생했습니다.');
+    }
   };
 
   return (
     <>
       <div className="flex h-screen w-full flex-col bg-white">
-        <Header role="ADMIN" />
+        <Header />
 
         <div className="flex w-full flex-1 overflow-hidden">
           <AdminMenu />
@@ -111,7 +197,19 @@ export default function AdminJobsPage() {
               </div>
             </div>
 
-            <JobTable search={search} jobs={jobs} setJobs={setJobs} />
+            {isLoading ? (
+              <div className="py-10 text-sm text-neutral-500">불러오는 중...</div>
+            ) : (
+              <JobTable
+                search={search}
+                jobs={jobs}
+                onEdit={(job) => {
+                  setSelectedJob(job);
+                  setIsEditModalOpen(true);
+                }}
+                onDelete={handleDeleteJob}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -120,9 +218,18 @@ export default function AdminJobsPage() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onAdd={(job) => {
-          handleAddJob(job);
-          setIsAddModalOpen(false);
+          return handleAddJob(job);
         }}
+      />
+
+      <EditJobCategoryModal
+        isOpen={isEditModalOpen}
+        initialValue={{
+          name: selectedJob?.name ?? '',
+          description: selectedJob?.description ?? '',
+        }}
+        onClose={() => setIsEditModalOpen(false)}
+        onSubmit={handleEditJob}
       />
     </>
   );
