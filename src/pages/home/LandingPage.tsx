@@ -120,7 +120,7 @@ export default function LandingPage() {
       <div className="inline-flex w-full flex-col items-center justify-center gap-20 bg-gradient-to-b from-[#DCDEFF] from-40% to-indigo-400 px-56 py-20">
         <div className="flex flex-col items-center justify-start gap-5">
           <div className="flex flex-col items-center justify-start gap-2">
-            <img src="../../../public/LOGO_COLOR.svg" alt={'LOGO'} />
+            <img src="public/LOGO_COLOR.svg" alt={'LOGO'} />
             <div className="text-logotext justify-start text-3xl leading-10 font-bold">
               Why Us ?
             </div>
