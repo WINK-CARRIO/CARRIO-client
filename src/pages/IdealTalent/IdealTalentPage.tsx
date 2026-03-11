@@ -2,9 +2,9 @@ import Header from '../../components/Header.tsx';
 import Card from './Card.tsx';
 import { useEffect, useState } from 'react';
 import CompanyModal from './modal/CompanyModal.tsx';
-import SamsungLogo from '../../assets/SAMSUNG.jpg';
-import LGLogo from '../../assets/LG.png';
-import MolocoLogo from '../../assets/MOLOCO.png';
+import SamsungLogo from '../../../public/SAMSUNG.jpg';
+import LGLogo from '../../../public/LG.png';
+import MolocoLogo from '../../../public/MOLOCO.png';
 
 type Company = {
   id: number;
@@ -34,9 +34,12 @@ export default function IdealTalentPage() {
       try {
         setIsLoading(true);
 
-        const res = await fetch(`${API_URL}/companies?sort=name&page=1&limit=20`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        });
+        const res = await fetch(
+          `${API_URL}/companies?sort=name&page=1&limit=20`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+          }
+        );
         const data: CompaniesResponse = await res.json();
 
         if (!res.ok) {
