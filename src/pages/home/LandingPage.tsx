@@ -7,6 +7,11 @@ import StepCard from '../../components/StepCard.tsx';
 export default function LandingPage() {
   const navigate = useNavigate();
 
+  const handleDraftClick = () => {
+    const token = localStorage.getItem('access_token');
+    navigate(token ? '/draft' : '/login');
+  };
+
   return (
     <div className="inline-flex w-full flex-col items-start justify-start bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.01%_0.00%,_#7C86FF_46%,_#959DFF_59%,_#AEB4FF_73%,_#D6D9FF_100%)]">
       <Header />
@@ -36,7 +41,7 @@ export default function LandingPage() {
         </div>
         <div className="inline-flex items-center justify-center gap-2.5">
           <button
-            onClick={() => navigate('/login')}
+            onClick={handleDraftClick}
             className="group relative cursor-pointer px-6 py-3 text-lg font-semibold text-white transition"
           >
             <span className="relative z-10">자소서 작성하기 →</span>

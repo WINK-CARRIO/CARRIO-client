@@ -50,6 +50,11 @@ export default function Header() {
     navigate('/login');
   };
 
+  const handleDraftClick = () => {
+    const token = localStorage.getItem('access_token');
+    navigate(token ? '/draft' : '/login');
+  };
+
   return (
     <header className="sticky top-0 z-50 inline-flex h-16 w-full items-center justify-between bg-indigo-400 px-8 py-3 shadow-[0px_2px_4px_0px_rgba(0,0,0,0.25)]">
       <div className="flex items-center gap-2">
@@ -60,22 +65,37 @@ export default function Header() {
       </div>
 
       <nav className="flex h-10 items-center gap-10">
-        {menus.map(({ label, path }) => (
-          <NavLink
-            key={path}
-            to={path}
-            className={({ isActive }) =>
-              [
+        {menus.map(({ label, path }) =>
+          label === '초안 작성하기' ? (
+            <button
+              key={path}
+              onClick={handleDraftClick}
+              className={[
                 'text-sm font-medium transition-colors',
-                isActive
+                location.pathname.startsWith('/draft')
                   ? 'text-white underline underline-offset-4'
                   : 'text-white/80 hover:text-white',
-              ].join(' ')
-            }
-          >
-            {label}
-          </NavLink>
-        ))}
+              ].join(' ')}
+            >
+              {label}
+            </button>
+          ) : (
+            <NavLink
+              key={path}
+              to={path}
+              className={({ isActive }) =>
+                [
+                  'text-sm font-medium transition-colors',
+                  isActive
+                    ? 'text-white underline underline-offset-4'
+                    : 'text-white/80 hover:text-white',
+                ].join(' ')
+              }
+            >
+              {label}
+            </NavLink>
+          )
+        )}
 
         {isLoggedIn && (
           <button
