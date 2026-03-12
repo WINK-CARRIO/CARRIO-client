@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 type Props = {
   onClose: () => void;
@@ -12,7 +13,7 @@ export default function SkillAddModal({ onClose, onSave }: Props) {
     const trimmed = skill.trim();
 
     if (!trimmed) {
-      alert('기술 스택을 입력해주세요.');
+      toast.error('기술 스택을 입력해주세요.');
       return;
     }
 

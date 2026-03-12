@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import ExitIcon from '../assets/svgs/icon/ExitIcon.tsx';
+import toast from 'react-hot-toast';
 
 type CompanyForm = {
   name: string;
@@ -39,7 +40,7 @@ export default function EditCompanyModal({
 
   const handleSubmit = async () => {
     if (!form.name.trim()) {
-      alert('기업명은 필수입니다.');
+      toast.error('기업명은 필수입니다.');
       return;
     }
 

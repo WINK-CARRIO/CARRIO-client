@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 type Props = {
   type: '자격증' | '프로젝트' | '대외활동';
@@ -17,7 +18,7 @@ export default function SpecAddModal({ type, onClose, onSave }: Props) {
 
   const handleSave = () => {
     if (!title.trim()) {
-      alert('제목을 입력해주세요.');
+      toast.error('제목을 입력해주세요.');
       return;
     }
 

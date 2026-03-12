@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import StepIndicator from '../../components/StepIndicator';
 
 type DraftData = {
@@ -140,16 +141,16 @@ export default function DraftStep3Page() {
 
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        alert(body.detail ?? body.message ?? '저장에 실패했습니다');
+        toast.error(body.detail ?? body.message ?? '저장에 실패했습니다');
         return;
       }
 
       sessionStorage.removeItem('draft_data');
-      alert('자소서가 저장되었습니다');
+      toast.success('자소서가 저장되었습니다');
       navigate('/result');
     } catch (error) {
       console.error('저장 에러:', error);
-      alert('서버 오류가 발생했습니다');
+      toast.error('서버 오류가 발생했습니다');
     } finally {
       setIsSaving(false);
     }

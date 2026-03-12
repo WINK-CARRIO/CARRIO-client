@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { HTMLMotionProps } from 'framer-motion';
 import KakaoLogo from '../../assets/svgs/KakaoLogo.tsx';
+import toast from 'react-hot-toast';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
-      alert('이메일과 비밀번호를 입력해주세요.');
+      toast.error('이메일과 비밀번호를 입력해주세요.');
       return;
     }
 
@@ -37,18 +38,21 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.detail || data.message || '로그인에 실패했습니다.');
+        toast.error(data.detail || data.message || '로그인에 실패했습니다.');
         return;
       }
 
       localStorage.setItem('access_token', data.access_token);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      alert('로그인에 성공했습니다.');
-      navigate('/');
+      toast.success('로그인에 성공했습니다.');
+
+      setTimeout(() => {
+        navigate('/');
+      }, 800);
     } catch (error) {
       console.error('login error:', error);
-      alert('서버 오류가 발생했습니다.');
+      toast.error('서버 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -65,14 +69,16 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.detail || data.message || '카카오 로그인에 실패했습니다.');
+        toast.error(
+          data.detail || data.message || '카카오 로그인에 실패했습니다.'
+        );
         return;
       }
 
       window.location.href = data.url;
     } catch (error) {
       console.error('kakao login error:', error);
-      alert('카카오 로그인 요청 중 오류가 발생했습니다.');
+      toast.error('카카오 로그인 요청 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import ExitIcon from '../assets/svgs/icon/ExitIcon.tsx';
+import toast from 'react-hot-toast';
 
 type JobCategoryOption = {
   job_category_id: number;
@@ -39,7 +40,7 @@ export default function ExtractJobTalentModal({
   const handleSubmit = async () => {
     const parsed = Number(jobCategoryId);
     if (!Number.isFinite(parsed) || parsed <= 0) {
-      alert('직군 ID를 숫자로 입력해주세요.');
+      toast.error('직군 ID를 숫자로 입력해주세요.');
       return;
     }
 

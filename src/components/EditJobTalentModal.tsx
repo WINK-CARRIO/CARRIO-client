@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import ExitIcon from '../assets/svgs/icon/ExitIcon.tsx';
+import toast from 'react-hot-toast';
 
 type JobTalentForm = {
   keywords: string;
@@ -41,7 +42,7 @@ export default function EditJobTalentModal({
 
   const handleSubmit = async () => {
     if (!form.keywords.trim() || !form.description.trim() || !form.details.trim()) {
-      alert('키워드/설명/세부 내용을 모두 입력해주세요.');
+      toast.error('키워드/설명/세부 내용을 모두 입력해주세요.');
       return;
     }
 

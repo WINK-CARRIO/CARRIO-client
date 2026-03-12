@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { useAuthStore } from '../../store/authStore';
 
 export default function KakaoCallbackPage() {
@@ -13,7 +14,7 @@ export default function KakaoCallbackPage() {
     const token = searchParams.get('token');
 
     if (!token) {
-      alert('카카오 로그인에 실패했습니다.');
+      toast.error('카카오 로그인에 실패했습니다.');
       navigate('/login');
       return;
     }
@@ -29,7 +30,7 @@ export default function KakaoCallbackPage() {
         const data = await res.json();
 
         if (!res.ok) {
-          alert(
+          toast.error(
             data.detail || data.message || '사용자 정보를 불러오지 못했습니다.'
           );
           navigate('/login');

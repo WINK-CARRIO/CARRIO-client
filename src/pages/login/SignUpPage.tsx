@@ -4,6 +4,7 @@ import { type HTMLMotionProps, motion } from 'framer-motion';
 import { useCallback, useState } from 'react';
 import KakaoLogo from '../../assets/svgs/KakaoLogo.tsx';
 import { useAuthStore } from '../../store/authStore';
+import toast from 'react-hot-toast';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -19,12 +20,12 @@ export default function SignUpPage() {
 
   const validatePasswordMatch = useCallback(() => {
     if (password !== confirmPassword) {
-      alert('비밀번호가 일치하지 않습니다.');
+      toast.error('비밀번호가 일치하지 않습니다.');
       return false;
     }
 
     if (password.length < 8) {
-      alert('비밀번호는 8자 이상이어야 합니다.');
+      toast.error('비밀번호는 8자 이상이어야 합니다.');
       return false;
     }
 
@@ -38,7 +39,7 @@ export default function SignUpPage() {
       !password.trim() ||
       !confirmPassword.trim()
     ) {
-      alert('이름, 이메일, 비밀번호를 모두 입력해주세요.');
+      toast.error('이름, 이메일, 비밀번호를 모두 입력해주세요.');
       return;
     }
 
@@ -69,7 +70,7 @@ export default function SignUpPage() {
               ? data.detail.map((item: { msg?: string }) => item.msg).join('\n')
               : data.message || '회원가입에 실패했습니다.';
 
-        alert(errorMessage);
+        toast.error(errorMessage);
         return;
       }
 
@@ -78,11 +79,14 @@ export default function SignUpPage() {
         user: data.user,
       });
 
-      alert('회원가입에 성공했습니다.');
-      navigate('/');
+      toast.success('회원가입에 성공했습니다.');
+
+      setTimeout(() => {
+        navigate('/');
+      }, 800);
     } catch (error) {
       console.error('register error:', error);
-      alert('서버 오류가 발생했습니다.');
+      toast.error('서버 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -116,14 +120,16 @@ export default function SignUpPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.detail || data.message || '카카오 로그인에 실패했습니다.');
+        toast.error(
+          data.detail || data.message || '카카오 로그인에 실패했습니다.'
+        );
         return;
       }
 
       window.location.href = data.url;
     } catch (error) {
       console.error('kakao login error:', error);
-      alert('카카오 로그인 요청 중 오류가 발생했습니다.');
+      toast.error('카카오 로그인 요청 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }

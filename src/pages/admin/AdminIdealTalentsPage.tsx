@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 import AdminMenu from '../../components/AdminMenu';
 import Header from '../../components/Header';
 import PlusIcon from '../../assets/svgs/icon/PlusIcon';
@@ -288,7 +289,7 @@ export default function AdminIdealTalentsPage() {
       });
 
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return;
       }
 
@@ -312,7 +313,7 @@ export default function AdminIdealTalentsPage() {
       });
     } catch (error) {
       console.error('기업 목록 조회 에러:', error);
-      alert('기업 목록 조회 중 오류가 발생했습니다.');
+      toast.error('기업 목록 조회 중 오류가 발생했습니다.');
     } finally {
       setIsCompaniesLoading(false);
     }
@@ -424,16 +425,16 @@ export default function AdminIdealTalentsPage() {
       });
 
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return false;
       }
 
       await fetchCompanies();
-      alert('기업이 추가되었습니다.');
+      toast.success('기업이 추가되었습니다.');
       return true;
     } catch (error) {
       console.error('기업 추가 에러:', error);
-      alert('기업 추가 중 오류가 발생했습니다.');
+      toast.error('기업 추가 중 오류가 발생했습니다.');
       return false;
     }
   };
@@ -452,16 +453,16 @@ export default function AdminIdealTalentsPage() {
       );
 
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return false;
       }
 
       await fetchCompanies();
-      alert('기업 정보가 수정되었습니다.');
+      toast.success('기업 정보가 수정되었습니다.');
       return true;
     } catch (error) {
       console.error('기업 수정 에러:', error);
-      alert('기업 수정 중 오류가 발생했습니다.');
+      toast.error('기업 수정 중 오류가 발생했습니다.');
       return false;
     }
   };
@@ -476,7 +477,7 @@ export default function AdminIdealTalentsPage() {
       });
 
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return;
       }
 
@@ -486,10 +487,10 @@ export default function AdminIdealTalentsPage() {
         return clone;
       });
       await fetchCompanies();
-      alert('기업이 삭제되었습니다.');
+      toast.success('기업이 삭제되었습니다.');
     } catch (error) {
       console.error('기업 삭제 에러:', error);
-      alert('기업 삭제 중 오류가 발생했습니다.');
+      toast.error('기업 삭제 중 오류가 발생했습니다.');
     }
   };
 
@@ -505,15 +506,15 @@ export default function AdminIdealTalentsPage() {
       );
 
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return;
       }
 
       await reloadCompanyDetails(companyId);
-      alert('전사 인재상 추출이 완료되었습니다.');
+      toast.success('전사 인재상 추출이 완료되었습니다.');
     } catch (error) {
       console.error('전사 인재상 추출 에러:', error);
-      alert('전사 인재상 추출 중 오류가 발생했습니다.');
+      toast.error('전사 인재상 추출 중 오류가 발생했습니다.');
     } finally {
       setExtractingOverallIds((prev) => {
         const next = new Set(prev);
@@ -551,16 +552,16 @@ export default function AdminIdealTalentsPage() {
       );
 
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return false;
       }
 
       await reloadCompanyDetails(companyId);
-      alert('전사 인재상이 수정되었습니다.');
+      toast.success('전사 인재상이 수정되었습니다.');
       return true;
     } catch (error) {
       console.error('전사 인재상 수정 에러:', error);
-      alert('전사 인재상 수정 중 오류가 발생했습니다.');
+      toast.error('전사 인재상 수정 중 오류가 발생했습니다.');
       return false;
     }
   };
@@ -575,15 +576,15 @@ export default function AdminIdealTalentsPage() {
       });
 
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return;
       }
 
       await reloadCompanyDetails(companyId);
-      alert('전사 인재상이 삭제되었습니다.');
+      toast.success('전사 인재상이 삭제되었습니다.');
     } catch (error) {
       console.error('전사 인재상 삭제 에러:', error);
-      alert('전사 인재상 삭제 중 오류가 발생했습니다.');
+      toast.error('전사 인재상 삭제 중 오류가 발생했습니다.');
     }
   };
 
@@ -625,16 +626,16 @@ export default function AdminIdealTalentsPage() {
       );
 
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return false;
       }
 
       await reloadCompanyDetails(companyId);
-      alert('직무별 인재상 재추출이 완료되었습니다.');
+      toast.success('직무별 인재상 재추출이 완료되었습니다.');
       return true;
     } catch (error) {
       console.error('직무별 인재상 재추출 에러:', error);
-      alert('직무별 인재상 재추출 중 오류가 발생했습니다.');
+      toast.error('직무별 인재상 재추출 중 오류가 발생했습니다.');
       return false;
     } finally {
       setExtractingJobIds((prev) => {
@@ -681,16 +682,16 @@ export default function AdminIdealTalentsPage() {
       );
 
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return false;
       }
 
       await reloadCompanyDetails(companyId);
-      alert('직무별 인재상이 수정되었습니다.');
+      toast.success('직무별 인재상이 수정되었습니다.');
       return true;
     } catch (error) {
       console.error('직무별 인재상 수정 에러:', error);
-      alert('직무별 인재상 수정 중 오류가 발생했습니다.');
+      toast.error('직무별 인재상 수정 중 오류가 발생했습니다.');
       return false;
     }
   };
@@ -708,15 +709,15 @@ export default function AdminIdealTalentsPage() {
       );
 
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return;
       }
 
       await reloadCompanyDetails(companyId);
-      alert('직무별 인재상이 삭제되었습니다.');
+      toast.success('직무별 인재상이 삭제되었습니다.');
     } catch (error) {
       console.error('직무별 인재상 삭제 에러:', error);
-      alert('직무별 인재상 삭제 중 오류가 발생했습니다.');
+      toast.error('직무별 인재상 삭제 중 오류가 발생했습니다.');
     }
   };
 

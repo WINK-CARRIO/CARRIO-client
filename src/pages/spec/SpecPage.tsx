@@ -10,6 +10,7 @@ import ActivitySection from './activitySection/ActivitySection.tsx';
 import SpecAddModal from './SpecAddModal';
 import EducationEditModal from './EducationEditModal';
 import SkillAddModal from './SkillAddModal';
+import toast from 'react-hot-toast';
 
 type Certification = {
   name: string;
@@ -280,7 +281,7 @@ export default function SpecPage() {
       const token = localStorage.getItem('access_token');
 
       if (!token) {
-        alert('로그인이 필요합니다.');
+        toast.error('로그인이 필요합니다.');
         return;
       }
 
@@ -291,7 +292,7 @@ export default function SpecPage() {
         spec.structured_data.education.grad_year > 0;
 
       if (!hasEducation) {
-        alert('학력 정보(학교, 전공, 입학/졸업 연도)를 먼저 입력해주세요.');
+        toast.error('학력 정보(학교, 전공, 입학/졸업 연도)를 먼저 입력해주세요.');
         return;
       }
 
@@ -300,7 +301,7 @@ export default function SpecPage() {
       );
 
       if (invalidCertification) {
-        alert('자격증은 이름과 취득일을 모두 입력해야 저장됩니다.');
+        toast.error('자격증은 이름과 취득일을 모두 입력해야 저장됩니다.');
         return;
       }
 
@@ -310,7 +311,7 @@ export default function SpecPage() {
       );
 
       if (invalidExperience) {
-        alert('프로젝트/대외활동은 제목과 설명을 모두 입력해야 저장됩니다.');
+        toast.error('프로젝트/대외활동은 제목과 설명을 모두 입력해야 저장됩니다.');
         return;
       }
 
@@ -346,7 +347,7 @@ export default function SpecPage() {
 
       if (!res.ok) {
         const message = await parseErrorMessage(res);
-        alert(message);
+        toast.error(message);
         return;
       }
 
@@ -354,10 +355,10 @@ export default function SpecPage() {
       setSpec(normalizeSpec(data));
 
       setHasExistingSpec(true);
-      alert('스펙이 저장되었습니다.');
+      toast.success('스펙이 저장되었습니다.');
     } catch (error) {
       console.error('spec save error:', error);
-      alert('서버 오류가 발생했습니다.');
+      toast.error('서버 오류가 발생했습니다.');
     } finally {
       setIsSaving(false);
     }
@@ -368,7 +369,7 @@ export default function SpecPage() {
       const token = localStorage.getItem('access_token');
 
       if (!token) {
-        alert('로그인이 필요합니다.');
+        toast.error('로그인이 필요합니다.');
         return;
       }
 
@@ -384,16 +385,16 @@ export default function SpecPage() {
 
       if (!res.ok) {
         const message = await parseErrorMessage(res);
-        alert(message);
+        toast.error(message);
         return;
       }
 
       setSpec(EMPTY_SPEC);
       setHasExistingSpec(false);
-      alert('스펙이 삭제되었습니다.');
+      toast.success('스펙이 삭제되었습니다.');
     } catch (error) {
       console.error('spec delete error:', error);
-      alert('서버 오류가 발생했습니다.');
+      toast.error('서버 오류가 발생했습니다.');
     }
   };
 
@@ -474,7 +475,7 @@ export default function SpecPage() {
       );
 
       if (exists) {
-        alert('이미 추가된 기술 스택입니다.');
+        toast.error('이미 추가된 기술 스택입니다.');
         return prev;
       }
 

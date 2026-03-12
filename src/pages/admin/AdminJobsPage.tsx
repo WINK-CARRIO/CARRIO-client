@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import Header from '../../components/Header.tsx';
 import PlusIcon from '../../assets/svgs/icon/PlusIcon.tsx';
 import MagnifyIcon from '../../assets/svgs/icon/MagnifyIcon.tsx';
@@ -58,7 +59,7 @@ export default function AdminJobsPage() {
       setIsLoading(true);
       const res = await fetch(`${API_URL}/job-categories`);
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         setJobs([]);
         return;
       }
@@ -96,14 +97,14 @@ export default function AdminJobsPage() {
         }),
       });
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return false;
       }
       await fetchJobs();
       return true;
     } catch (error) {
       console.error('직군 추가 에러:', error);
-      alert('직군 추가 중 오류가 발생했습니다.');
+      toast.error('직군 추가 중 오류가 발생했습니다.');
       return false;
     }
   };
@@ -120,14 +121,14 @@ export default function AdminJobsPage() {
         }
       );
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return false;
       }
       await fetchJobs();
       return true;
     } catch (error) {
       console.error('직군 수정 에러:', error);
-      alert('직군 수정 중 오류가 발생했습니다.');
+      toast.error('직군 수정 중 오류가 발생했습니다.');
       return false;
     }
   };
@@ -140,13 +141,13 @@ export default function AdminJobsPage() {
         headers: getAuthHeaders(),
       });
       if (!res.ok) {
-        alert(await parseErrorMessage(res));
+        toast.error(await parseErrorMessage(res));
         return;
       }
       await fetchJobs();
     } catch (error) {
       console.error('직군 삭제 에러:', error);
-      alert('직군 삭제 중 오류가 발생했습니다.');
+      toast.error('직군 삭제 중 오류가 발생했습니다.');
     }
   };
 

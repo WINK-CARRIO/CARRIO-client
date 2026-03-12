@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import StatusBadge from '../../components/StatusBadge';
 import DownIcon from '../../assets/svgs/icon/DownIcon';
 import SamsungLogo from '../../../public/SAMSUNG.jpg';
@@ -169,7 +170,7 @@ export default function ResultPage() {
       });
 
       if (!res.ok) {
-        alert('삭제에 실패했습니다.');
+        toast.error('삭제에 실패했습니다.');
         return;
       }
 
@@ -183,7 +184,7 @@ export default function ResultPage() {
       fetchList(1);
     } catch (error) {
       console.error('자소서 삭제 에러:', error);
-      alert('서버 오류가 발생했습니다.');
+      toast.error('서버 오류가 발생했습니다.');
     }
   };
 
