@@ -1,74 +1,55 @@
-# React + TypeScript + Vite
+CARRIO
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+서비스 웹페이지
+carrioclient.vercel.app
 
-Currently, two official plugins are available:
+AI 기반 커리어 인사이트 및 자기소개서 작성 지원 서비스
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+프로젝트 소개
 
-## React Compiler
+CARRIO는 취업 준비 과정에서 필요한 기업 분석과 자기소개서 작성을 조금 더 효율적으로 할 수 있도록 돕기 위해 기획한 서비스입니다.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+취업을 준비하다 보면 지원하려는 기업의 정보를 찾고, 기업의 인재상과 직무 요구 역량을 분석한 뒤 이를 바탕으로 자기소개서를 작성해야 합니다. 하지만 이 과정에서 많은 시간을 정보 탐색과 정리에 사용하게 되고, 어떤 방향으로 준비해야 하는지 판단하기 어려운 경우도 많습니다.
 
-## Expanding the ESLint configuration
+CARRIO는 이러한 과정을 조금 더 간단하게 만들기 위해 기업 정보와 인재상 데이터를 기반으로 사용자가 참고할 수 있는 커리어 방향을 제시하고, 입력한 경험을 바탕으로 자기소개서 작성을 도와주는 서비스를 목표로 합니다.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+⸻
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+문제 인식
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+취업 준비 과정에서 다음과 같은 어려움을 느꼈습니다.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+기업에 지원하기 위해서는 기업 정보와 인재상을 조사해야 하는데 여러 자료를 찾아보고 정리하는 데 많은 시간이 필요합니다. 또한 기업마다 요구하는 역량과 자기소개서 내용이 달라 같은 경험을 바탕으로도 매번 새롭게 정리해야 하는 경우가 많습니다.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+특히 자기소개서를 작성할 때 자신의 경험을 어떻게 정리하고 어떤 방향으로 작성해야 할지 막막한 경우가 많았고, 이러한 과정에서 취업 준비에 많은 시간과 부담이 발생한다고 느꼈습니다.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+⸻
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# CARRIO-client
+해결 방향
+
+CARRIO에서는 사용자가 입력한 스펙과 경험을 기반으로 기업 정보를 분석하고, 이를 바탕으로 커리어 준비 방향을 참고할 수 있도록 구성했습니다.
+
+사용자는 자신의 활동이나 경험을 입력하면 기업 인재상과 비교하여 어떤 역량이 맞는지 확인할 수 있고, 이를 기반으로 자기소개서 작성에 참고할 수 있는 내용을 생성할 수 있습니다.
+
+이를 통해 기업 분석과 자기소개서 작성 과정에서 필요한 시간을 줄이고, 취업 준비 과정에서 참고할 수 있는 기준을 제공하는 것을 목표로 했습니다.
+
+⸻
+
+Frontend
+
+CARRIO의 프론트엔드는 React 기반으로 구현되었으며, 사용자가 자신의 스펙을 입력하고 기업 정보를 확인하며 자기소개서를 생성하는 흐름을 중심으로 구성했습니다.
+
+컴포넌트 단위로 UI를 구성하여 유지보수가 쉽도록 했으며, API 데이터를 효율적으로 관리하고 사용자 상태를 안정적으로 관리하는 데 중점을 두었습니다.
+
+⸻
+
+기술 스택
+	•	React
+	•	TypeScript
+	•	Tailwind CSS
+	•	Zustand
+	•	TanStack Query (React Query)
+	•	Framer Motion
+	•	Vite
+  
+⸻
